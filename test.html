@@ -2,51 +2,75 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Blynk Web Dashboard — Legacy 0.41.x (robust HW + read autodetect)</title>
+<title>Blynk Web Dashboard — Legacy 0.41.x (User Friendly)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
-  :root { --bg:#0f172a; --card:#111827; --soft:#1f2937; --text:#e5e7eb; --muted:#9ca3af; --accent:#22c55e; --danger:#ef4444; }
+  :root {
+    --bg:#0f172a; --card:#111827; --soft:#1f2937; --text:#e5e7eb; --muted:#9ca3af;
+    --accent:#22c55e; --danger:#ef4444; --light-bg:#f3f4f6; --light-card:#fff; --light-soft:#e5e7eb;
+    --light-text:#222; --light-muted:#6b7280; --light-accent:#16a34a; --light-danger:#dc2626;
+  }
+  [data-theme="light"] {
+    --bg:var(--light-bg); --card:var(--light-card); --soft:var(--light-soft); --text:var(--light-text);
+    --muted:var(--light-muted); --accent:var(--light-accent); --danger:var(--light-danger);
+  }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial; }
   header { padding:14px 16px; display:flex; gap:10px; align-items:center; border-bottom:1px solid #222; position:sticky; top:0; background:rgba(15,23,42,.92); backdrop-filter: blur(6px); z-index:10; }
-  input { background:var(--soft); color:var(--text); border:1px solid #2b3443; border-radius:8px; padding:8px 10px; outline:none; }
+  [data-theme="light"] header { background:rgba(243,244,246,.92); border-bottom:1px solid #e5e7eb; }
+  input, select { background:var(--soft); color:var(--text); border:1px solid #2b3443; border-radius:8px; padding:8px 10px; outline:none; }
   input::placeholder { color:var(--muted); }
-  button { border:0; border-radius:8px; padding:9px 14px; cursor:pointer; color:#0b1220; background:var(--accent); font-weight:600; }
+  button { border:0; border-radius:8px; padding:9px 14px; cursor:pointer; color:#0b1220; background:var(--accent); font-weight:600; transition:background 0.2s; }
+  button:disabled { background:var(--muted); color:#fff; cursor:not-allowed; }
   .badge { font-size:12px; color:#a7f3d0; background:#064e3b; border-radius:999px; padding:2px 8px; }
   #status { margin-left:auto; font-size:12px; color:var(--muted); }
   main { padding:16px; }
   .hint { font-size:12px; color:var(--muted); margin-bottom:10px; }
   .section { background:var(--card); border:1px solid #222; border-radius:12px; padding:14px; margin-bottom:14px; }
   .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:14px; }
-  .card { background:#0f172a; border:1px solid #1f2a3a; border-radius:12px; padding:14px; }
-  .card h3 { margin:0 0 8px; font-size:14px; color:#d1d5db; }
-  .kv { font-size:12px; color:var(--muted); }
+  .card { background:var(--card); border:1px solid #1f2a3a; border-radius:12px; padding:14px; box-shadow:0 2px 8px #0002; }
+  [data-theme="light"] .card { background:var(--light-card); border:1px solid #e5e7eb; }
+  .card h3 { margin:0 0 8px; font-size:15px; color:#d1d5db; }
+  .kv { font-size:13px; color:var(--muted); }
   .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
   .pill { display:inline-flex; padding:2px 8px; border-radius:999px; background:#1f2937; color:#9ca3af; font-size:11px; }
+  [data-theme="light"] .pill { background:#e5e7eb; color:#6b7280; }
   .switch button { min-width:72px; }
   input[type="range"] { width:100%; }
+  .error { color:var(--danger); margin:8px 0 0 0; font-size:14px; }
+  .loader { display:inline-block; width:18px; height:18px; border:3px solid var(--accent); border-radius:50%; border-top:3px solid transparent; animation:spin 1s linear infinite; vertical-align:middle; margin-left:8px;}
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  @media (max-width:600px) {
+    header { flex-wrap:wrap; gap:6px; }
+    main { padding:8px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+  .success { color:var(--accent); font-size:13px; margin-top:6px; }
 </style>
 </head>
 <body>
-
 <header>
-  <input id="server" placeholder="Server (e.g. 172.16.2.32)" size="20" />
-  <input id="token" placeholder="Auth Token" size="30" />
+  <label for="server" style="display:none;">Server</label>
+  <input id="server" placeholder="Server (e.g. 172.16.2.32)" size="20" aria-label="Server address" />
+  <label for="token" style="display:none;">Auth Token</label>
+  <input id="token" placeholder="Auth Token" size="30" type="password" aria-label="Auth Token" autocomplete="off" />
+  <button id="showTokenBtn" aria-label="Show/hide token" title="Show/hide token" style="background:var(--soft);color:var(--text);font-weight:400;">👁️</button>
   <button id="connectBtn">Connect</button>
   <span id="modes" class="badge">API: write=?, read=?</span>
+  <button id="themeBtn" aria-label="Toggle dark/light mode" title="Toggle dark/light mode" style="background:var(--soft);color:var(--text);font-weight:400;">🌙</button>
   <div id="status">idle</div>
 </header>
-
 <main>
   <div class="hint">
-    Tries <code>http://&lt;server&gt;:8080</code> → <code>https://&lt;server&gt;:9443</code> • Loads <code>/projects</code> → <code>/project</code> → <code>/dashboard</code> •
-    Writes via <b>/hardware</b> (POST form → GET query → POST text) then falls back • Reads via <b>/get</b> (no params) → <b>/external/api/get</b> → <b>hardware vr</b>. Auto-polls every 2s.
+    Enter your Blynk server and token, then click <b>Connect</b>. <br>
+    Supports legacy Blynk 0.41.x. Auto-polls every 2s. <br>
+    <span style="color:var(--danger)">Tip: Use a secure connection (https) if possible.</span>
   </div>
+  <div id="errorMsg" class="error" style="display:none;"></div>
+  <div id="successMsg" class="success" style="display:none;"></div>
   <div id="projectsWrap"></div>
 </main>
-
 <script>
-/* ================= STATE ================= */
 const els = {
   server: document.getElementById('server'),
   token: document.getElementById('token'),
@@ -54,27 +78,68 @@ const els = {
   status: document.getElementById('status'),
   modes: document.getElementById('modes'),
   projectsWrap: document.getElementById('projectsWrap'),
+  errorMsg: document.getElementById('errorMsg'),
+  showTokenBtn: document.getElementById('showTokenBtn'),
+  themeBtn: document.getElementById('themeBtn'),
+  successMsg: document.getElementById('successMsg'),
 };
 let baseURL = "";
 let pollTimer = null;
 const REFRESH_MS = 2000;
+let WRITE_MODE = null;
+let READ_MODE  = null;
 
-let WRITE_MODE = null; // 'hw_post_form'|'hw_get'|'hw_post_text'|'external_get'|'external_post'|'update'|'virtual'|'pin'
-let READ_MODE  = null; // 'get'|'external_get'|'hw_vr_post_form'|'hw_vr_get'|'hw_vr_post_text'
+function setTheme(theme) {
+  document.body.setAttribute('data-theme', theme);
+  localStorage.setItem('blynk_theme', theme);
+  els.themeBtn.textContent = theme === 'light' ? '🌞' : '🌙';
+}
+function toggleTheme() {
+  setTheme(document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+}
+(function restoreTheme() {
+  setTheme(localStorage.getItem('blynk_theme') || 'dark');
+})();
+els.themeBtn.addEventListener('click', toggleTheme);
 
-/* restore */
-try{
-  const saved=JSON.parse(localStorage.getItem('blynk_web_cfg_rugged')||"{}");
-  if(saved.server) els.server.value=saved.server;
-  if(saved.token)  els.token.value=saved.token;
-  if(saved.wm) WRITE_MODE=saved.wm;
-  if(saved.rm) READ_MODE=saved.rm;
-  showModes();
-}catch{}
+els.showTokenBtn.addEventListener('click', () => {
+  if (els.token.type === 'password') {
+    els.token.type = 'text';
+    els.showTokenBtn.textContent = '🙈';
+  } else {
+    els.token.type = 'password';
+    els.showTokenBtn.textContent = '👁️';
+  }
+});
 
-/* =============== utils =============== */
-function setStatus(t){ els.status.textContent=t; }
-function showModes(){ els.modes.textContent=`API: write=${WRITE_MODE||'?'}, read=${READ_MODE||'?'}`; }
+function setStatus(t, loading=false) {
+  els.status.textContent = t;
+  if (loading) {
+    if (!els.status.querySelector('.loader')) {
+      const loader = document.createElement('span');
+      loader.className = 'loader';
+      els.status.appendChild(loader);
+    }
+  } else {
+    const l = els.status.querySelector('.loader');
+    if (l) l.remove();
+  }
+}
+function showModes() {
+  els.modes.textContent = `API: write=${WRITE_MODE||'?'}, read=${READ_MODE||'?'}`;
+}
+function showError(msg) {
+  els.errorMsg.textContent = msg;
+  els.errorMsg.style.display = msg ? '' : 'none';
+  els.successMsg.style.display = 'none';
+}
+function showSuccess(msg) {
+  els.successMsg.textContent = msg;
+  els.successMsg.style.display = msg ? '' : 'none';
+  els.errorMsg.style.display = 'none';
+}
+function clearError() { showError(''); }
+function clearSuccess() { showSuccess(''); }
 function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 function saveCfg(){
   localStorage.setItem('blynk_web_cfg_rugged', JSON.stringify({
@@ -99,9 +164,8 @@ async function tryJSON(url, opts={}){
   if(ct.includes('application/json')) return res.json();
   const txt=await res.text(); try{ return JSON.parse(txt);}catch{ return txt; }
 }
-function escapeHTML(s){ return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function escapeHTML(s){ return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]); }
 
-/* =============== pin helpers =============== */
 function normPrefix(t){ const x=(t||'').toString().toUpperCase(); if(x==='V'||x==='VIRTUAL')return'V'; if(x==='D'||x==='DIGITAL')return'D'; if(x==='A'||x==='ANALOG')return'A'; return''; }
 function extractPinString(w){
   if(!w) return '';
@@ -122,7 +186,6 @@ function pinToHW(pin){
   return { cmd: t==='V'?'vw':(t==='D'?'dw':'aw'), num:n };
 }
 
-/* =============== load projects =============== */
 async function resolveBaseAndFetchProjects(){
   const token=els.token.value.trim(); if(!token) throw new Error('Auth token required.');
   const eps=[(b)=>`${b}/${token}/projects`,(b)=>`${b}/${token}/project`,(b)=>`${b}/${token}/dashboard`];
@@ -130,7 +193,7 @@ async function resolveBaseAndFetchProjects(){
   for(const b of bases()){
     for(const mk of eps){
       try{
-        setStatus(`Trying ${mk(b)} ...`);
+        setStatus(`Trying ${mk(b)} ...`, true);
         const data=await tryJSON(mk(b));
         const projs=normalizeProjects(data);
         if(projs.length){ baseURL=b; setStatus(`Connected via ${baseURL}`); return projs; }
@@ -153,26 +216,21 @@ function widgetsOf(p){
   return all;
 }
 
-/* =============== READ (autodetect, NO params on /get) =============== */
 async function getPinValue(pin){
   const token=els.token.value.trim();
-
-  // use cached
   if(READ_MODE){
     try{
       const v=await readByMode(READ_MODE, pin, token);
       if(v!==undefined) return v;
     }catch{ READ_MODE=null; showModes(); }
   }
-
-  // detect
   const order=['get','external_get','hw_vr_post_form','hw_vr_get','hw_vr_post_text'];
   for(const m of order){
     try{
       const v=await readByMode(m,pin,token);
       READ_MODE=m; showModes(); saveCfg();
       return v;
-    }catch{ /* try next */ }
+    }catch{ }
   }
   return null;
 }
@@ -214,24 +272,19 @@ async function readByMode(mode, pin, token){
   }
 }
 
-/* =============== WRITE (hardware first; multiple encodings) =============== */
 async function setPinValue(pin, value){
   const token=els.token.value.trim();
-
-  // use cached
   if(WRITE_MODE){
     try{ await writeByMode(WRITE_MODE, pin, value, token); return WRITE_MODE; }
     catch{ WRITE_MODE=null; showModes(); }
   }
-
   const order=['hw_post_form','hw_get','hw_post_text','external_get','external_post','update','virtual','pin'];
   for(const m of order){
     try{ await writeByMode(m, pin, value, token); WRITE_MODE=m; showModes(); saveCfg(); return m; }
-    catch{ /* try next */ }
+    catch{ }
   }
   throw new Error('All write methods failed.');
 }
-
 async function writeByMode(mode, pin, value, token){
   switch(mode){
     case 'hw_post_form': {
@@ -247,7 +300,6 @@ async function writeByMode(mode, pin, value, token){
     }
     case 'hw_post_text': {
       const map=pinToHW(pin); if(!map) throw new Error('no hw map');
-      // try both numeric and "V<num>"
       try{
         return tryJSON(`${baseURL}/${token}/hardware`,{
           method:'POST', headers:{'Content-Type':'text/plain;charset=UTF-8'},
@@ -284,7 +336,6 @@ async function writeByMode(mode, pin, value, token){
   }
 }
 
-/* =============== UI rendering =============== */
 function renderProjects(projects){
   const wrap=els.projectsWrap; wrap.innerHTML='';
   projects.forEach((proj,pi)=>{
@@ -309,6 +360,8 @@ function renderWidget(w){
   const label=escapeHTML(w.label||w.name||'Widget');
   const type=(w.type||w.widgetType||'').toUpperCase();
   const pin=extractPinString(w); card.dataset.pin=pin||'';
+  card.setAttribute('tabindex', '0');
+  card.setAttribute('aria-label', label);
 
   card.innerHTML=`
     <div class="row" style="justify-content:space-between; margin-bottom:6px">
@@ -324,72 +377,121 @@ function renderWidget(w){
 
   if(['BUTTON','SWITCH'].includes(type)){
     const btn=document.createElement('button'); btn.textContent='...'; btn.dataset.state='0';
+    btn.setAttribute('aria-pressed', 'false');
+    btn.style.minWidth = '80px';
     btn.addEventListener('click', async ()=>{
+      btn.disabled = true;
+      clearError(); clearSuccess();
       const cur=btn.dataset.state==='1'?1:0; const next=cur?0:1;
       setBtn(btn,next);
       try{
         await setPinValue(pin,next);
         const echoed=await getPinValue(pin);
         if(echoed!==null){ setBtn(btn,Number(echoed)?1:0); echo.textContent=`server: ${echoed}`; }
-      }catch(e){ console.error(e); setBtn(btn,cur); }
+        showSuccess(`Button ${label} set to ${next ? 'ON' : 'OFF'}`);
+      }catch(e){ setBtn(btn,cur); showError(e.message); }
+      btn.disabled = false;
     });
     content.appendChild(btn);
-    (async()=>{ const v=await getPinValue(pin); setBtn(btn,Number(v||0)); if(v!==null) echo.textContent=`server: ${v}`; })();
+    (async()=>{ 
+      try{ 
+        btn.disabled = true;
+        const v=await getPinValue(pin); setBtn(btn,Number(v||0)); if(v!==null) echo.textContent=`server: ${v}`; 
+      }catch(e){ showError(e.message); } 
+      btn.disabled = false;
+    })();
   }
   else if(['SLIDER'].includes(type)){
     const min=Number(w.min??0), max=Number(w.max??255);
     const valueRow=document.createElement('div'); valueRow.className='kv'; valueRow.textContent='Value: …';
     const slider=document.createElement('input'); slider.type='range'; slider.min=String(min); slider.max=String(max); slider.step=String(w.step||1); slider.value=String(min);
+    slider.setAttribute('aria-valuemin', min);
+    slider.setAttribute('aria-valuemax', max);
+    slider.setAttribute('aria-label', label);
     slider.addEventListener('input', async e=>{
+      slider.disabled = true;
+      clearError(); clearSuccess();
       const nv=e.target.value; valueRow.textContent=`Value: ${nv}`;
       try{
         await setPinValue(pin,nv);
         const echoed=await getPinValue(pin);
         if(echoed!==null){ slider.value=String(echoed); valueRow.textContent=`Value: ${echoed}`; echo.textContent=`server: ${echoed}`; }
-      }catch(e){ console.error(e); }
+        showSuccess(`Slider ${label} set to ${nv}`);
+      }catch(e){ showError(e.message); }
+      slider.disabled = false;
     });
     content.appendChild(valueRow); content.appendChild(slider);
-    (async()=>{ const v=await getPinValue(pin); const init=v!==null?v:(w.value??min); slider.value=String(init); valueRow.textContent=`Value: ${init}`; if(v!==null) echo.textContent=`server: ${v}`; })();
+    (async()=>{ 
+      try{ 
+        slider.disabled = true;
+        const v=await getPinValue(pin); const init=v!==null?v:(w.value??min); slider.value=String(init); valueRow.textContent=`Value: ${init}`; if(v!==null) echo.textContent=`server: ${v}`; 
+      }catch(e){ showError(e.message); } 
+      slider.disabled = false;
+    })();
   }
   else{
     const p=document.createElement('div'); p.className='kv'; p.textContent='Value: …'; content.appendChild(p);
-    (async()=>{ const v=await getPinValue(pin); p.textContent=`Value: ${v??'—'}`; if(v!==null) echo.textContent=`server: ${v}`; })();
+    (async()=>{ try{ const v=await getPinValue(pin); p.textContent=`Value: ${v??'—'}`; if(v!==null) echo.textContent=`server: ${v}`; }catch(e){ showError(e.message); } })();
   }
   return card;
 }
-function setBtn(btn,n){ btn.dataset.state=String(n); btn.textContent=n?'ON':'OFF'; btn.style.background=n?'var(--accent)':'var(--danger)'; btn.style.color='#0b1220'; }
+function setBtn(btn,n){
+  btn.dataset.state=String(n);
+  btn.textContent=n?'ON':'OFF';
+  btn.style.background=n?'var(--accent)':'var(--danger)';
+  btn.style.color='#0b1220';
+  btn.setAttribute('aria-pressed', n?'true':'false');
+}
 
-/* =============== polling =============== */
 async function pollAll(){
   if(!baseURL) return;
+  setStatus('Polling...', true);
   const cards=[...document.querySelectorAll('.card[data-pin]')];
   for(const c of cards){
     const pin=c.dataset.pin; if(!pin) continue;
-    const fresh=await getPinValue(pin); if(fresh===null) continue;
-    const btn=c.querySelector('button'); const slider=c.querySelector('input[type="range"]');
-    const kvs=[...c.querySelectorAll('.kv')];
-    if(btn){ setBtn(btn,Number(fresh)?1:0); }
-    else if(slider){ if(document.activeElement!==slider){ if(String(slider.value)!==String(fresh)) slider.value=String(fresh);} }
-    const echo=kvs[kvs.length-1]; if(echo) echo.textContent=`server: ${fresh}`;
+    try {
+      const fresh=await getPinValue(pin); if(fresh===null) continue;
+      const btn=c.querySelector('button'); const slider=c.querySelector('input[type="range"]');
+      const kvs=[...c.querySelectorAll('.kv')];
+      if(btn){ setBtn(btn,Number(fresh)?1:0); }
+      else if(slider){ if(document.activeElement!==slider){ if(String(slider.value)!==String(fresh)) slider.value=String(fresh);} }
+      const echo=kvs[kvs.length-1]; if(echo) echo.textContent=`server: ${fresh}`;
+    } catch(e) {
+      showError(e.message);
+    }
   }
+  setStatus('Connected: '+baseURL);
 }
 function startPolling(){ stopPolling(); pollTimer=setInterval(pollAll, REFRESH_MS); }
 function stopPolling(){ if(pollTimer) clearInterval(pollTimer); pollTimer=null; }
 document.addEventListener('visibilitychange',()=>{ if(document.hidden) stopPolling(); else startPolling(); });
 
-/* =============== flow =============== */
 async function connectAndLoad(){
-  saveCfg(); setStatus('Connecting...'); baseURL=""; stopPolling();
+  clearError(); clearSuccess(); saveCfg(); setStatus('Connecting...', true); baseURL=""; stopPolling();
+  els.connectBtn.disabled = true;
   try{
     const projects=await resolveBaseAndFetchProjects();
     renderProjects(projects);
     setStatus(`Connected: ${baseURL}`);
     showModes();
+    showSuccess('Connected and loaded projects!');
     startPolling();
-  }catch(e){ console.error(e); setStatus(`Error: ${e.message}`); alert(e.message); }
+  }catch(e){ setStatus('Error', false); showError(e.message); }
+  els.connectBtn.disabled = false;
 }
 els.connectBtn.addEventListener('click', connectAndLoad);
 [els.server, els.token].forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') connectAndLoad(); }));
+
+(function restoreCfg(){
+  try{
+    const saved=JSON.parse(localStorage.getItem('blynk_web_cfg_rugged')||"{}");
+    if(saved.server) els.server.value=saved.server;
+    if(saved.token)  els.token.value=saved.token;
+    if(saved.wm) WRITE_MODE=saved.wm;
+    if(saved.rm) READ_MODE=saved.rm;
+    showModes();
+  }catch{}
+})();
 </script>
 </body>
 </html>
