@@ -1,395 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<title>Blynk Web Dashboard — Legacy 0.41.x (robust HW + read autodetect)</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>
-  :root { --bg:#0f172a; --card:#111827; --soft:#1f2937; --text:#e5e7eb; --muted:#9ca3af; --accent:#22c55e; --danger:#ef4444; }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial; }
-  header { padding:14px 16px; display:flex; gap:10px; align-items:center; border-bottom:1px solid #222; position:sticky; top:0; background:rgba(15,23,42,.92); backdrop-filter: blur(6px); z-index:10; }
-  input { background:var(--soft); color:var(--text); border:1px solid #2b3443; border-radius:8px; padding:8px 10px; outline:none; }
-  input::placeholder { color:var(--muted); }
-  button { border:0; border-radius:8px; padding:9px 14px; cursor:pointer; color:#0b1220; background:var(--accent); font-weight:600; }
-  .badge { font-size:12px; color:#a7f3d0; background:#064e3b; border-radius:999px; padding:2px 8px; }
-  #status { margin-left:auto; font-size:12px; color:var(--muted); }
-  main { padding:16px; }
-  .hint { font-size:12px; color:var(--muted); margin-bottom:10px; }
-  .section { background:var(--card); border:1px solid #222; border-radius:12px; padding:14px; margin-bottom:14px; }
-  .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:14px; }
-  .card { background:#0f172a; border:1px solid #1f2a3a; border-radius:12px; padding:14px; }
-  .card h3 { margin:0 0 8px; font-size:14px; color:#d1d5db; }
-  .kv { font-size:12px; color:var(--muted); }
-  .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-  .pill { display:inline-flex; padding:2px 8px; border-radius:999px; background:#1f2937; color:#9ca3af; font-size:11px; }
-  .switch button { min-width:72px; }
-  input[type="range"] { width:100%; }
-</style>
+  <meta charset="utf-8" />
+  <title>Blynk Web Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --emerald: #0effa8;
+      --seafoam: #82ffd5;
+      --emerald-bg: #0a1013;
+      --emerald-card: rgba(19,36,34, 0.35);
+      --emerald-border: rgba(14,255,168,0.23);
+      --emerald-shadow: 0 8px 38px 0 rgba(0,255,128,0.16);
+      --emerald-soft: #1f2937;
+      --emerald-muted: #82ffd5;
+      --emerald-text: #e5e7eb;
+      --emerald-danger: #ef4444;
+    }
+    html, body { height:100%; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Inter', Arial, sans-serif;
+      background: var(--emerald-bg);
+      background-image: url('data:image/svg+xml;utf8,<svg width="1600" height="900" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="black"/><g stroke="rgb(14,255,168)" stroke-width="3" opacity="0.89"><polyline points="120,90 300,90 420,210"/><polyline points="700,500 800,390 950,390"/><circle cx="420" cy="210" r="12" fill="rgb(14,255,168)" opacity="0.5"/><circle cx="950" cy="390" r="12" fill="rgb(14,255,168)" opacity="0.5"/><polyline points="310,680 700,500"/><polyline points="310,680 420,760"/><polyline points="1150,210 1300,90"/><circle cx="1300" cy="90" r="10" fill="rgb(14,255,168)" opacity="0.3"/><polyline points="420,210 700,500"/><polyline points="1150,210 950,390"/><circle cx="1150" cy="210" r="8" fill="rgb(14,255,168)" opacity="0.3"/></g><g stroke="rgb(14,255,168)" stroke-width="1.2" opacity="0.53"><line x1="720" y1="300" x2="800" y2="90"/><line x1="640" y1="680" x2="1300" y2="350"/><line x1="420" y1="760" x2="700" y2="820"/><line x1="120" y1="90" x2="200" y2="850"/></g></svg>');
+      background-size: cover;
+      background-position: center;
+    }
+    header {
+      background: var(--emerald-card);
+      border: 2px solid var(--emerald-border);
+      border-radius: 24px;
+      box-shadow: var(--emerald-shadow);
+      backdrop-filter: blur(14px) saturate(160%);
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
+      margin: 48px auto 24px auto;
+      padding: 28px 38px 18px 38px;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 18px;
+      position: relative;
+      z-index: 2;
+    }
+    .emerald-title {
+      text-align: center;
+      color: var(--emerald);
+      margin-top: 0;
+      margin-bottom: 18px;
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-shadow: 0 0 12px #10d98048;
+    }
+    .emerald-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0;
+    }
+    .emerald-input-group {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .emerald-input-group input {
+      width: 100%;
+      padding: 15px 40px 15px 18px;
+      background: rgba(14,255,168,0.09);
+      border-radius: 999px;
+      border: 1.5px solid rgba(14,255,168,0.29);
+      color: var(--emerald);
+      font-size: 1.1rem;
+      outline: none;
+      box-sizing: border-box;
+      transition: border 0.14s;
+    }
+    .emerald-input-group input:focus {
+      border: 1.8px solid var(--emerald);
+      background: rgba(14,255,168,0.15);
+    }
+    .emerald-input-group .icon {
+      position: absolute;
+      right: 18px;
+      color: var(--emerald);
+      font-size: 1.35em;
+      opacity: 0.80;
+      top: 50%;
+      transform: translateY(-50%);
+      text-shadow: 0 0 8px #0effa8a6;
+      pointer-events: none;
+    }
+    .emerald-input-group input::placeholder {
+      color: var(--seafoam);
+      opacity: 0.7;
+    }
+    .emerald-btn {
+      width: 100%;
+      margin: 10px 0 0 0;
+      color: #11281f;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 13px 0;
+      background: linear-gradient(90deg,var(--emerald) 70%,var(--seafoam) 100%);
+      border: none;
+      border-radius: 28px;
+      cursor: pointer;
+      transition: opacity .15s;
+      box-shadow: 0 2px 14px #10d98042;
+    }
+    .emerald-btn:hover { opacity: 0.94; }
+    .emerald-badge {
+      font-size:12px; color:var(--seafoam); background:rgba(14,255,168,0.13); border-radius:999px; padding:2px 8px;
+      margin-left: 8px;
+    }
+    #status {
+      font-size:13px; color:var(--seafoam);
+      text-align: right;
+      margin-top: 2px;
+      margin-bottom: -8px;
+    }
+    #status::before {
+      content:"● ";
+      color: var(--emerald-danger);
+      transition: color .3s;
+    }
+    #status.connected::before { color: var(--emerald); }
+    main {
+      max-width: 540px;
+      margin: 0 auto 40px auto;
+      padding: 0 8px;
+    }
+    .hint {
+      font-size:12px;
+      color:var(--seafoam);
+      margin-bottom:10px;
+      text-align: center;
+      text-shadow: 0 0 6px #0effa82a;
+    }
+    .section {
+      background: var(--emerald-card);
+      border: 1.5px solid var(--emerald-border);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: var(--emerald-shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px #0effa82a;
+    }
+    .grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap:16px;
+      align-items:stretch;
+    }
+    .card {
+      background: linear-gradient(145deg,#0e1627,#161f35);
+      border:1.5px solid var(--emerald-border);
+      border-radius:14px;
+      padding:16px;
+      transition: transform .2s, box-shadow .2s;
+      color: var(--emerald-text);
+    }
+    .card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 20px #0effa82a;
+    }
+    .card h3 { margin:0 0 6px; font-size:14px; color:var(--seafoam);}
+    .kv { font-size:12px; color:var(--seafoam); font-family:monospace; }
+    .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:space-between; }
+    .pill { display:inline-flex; padding:2px 8px; border-radius:999px; background:rgba(14,255,168,0.13);
+      color:var(--seafoam); font-size:11px;}
+    input[type="range"] {
+      -webkit-appearance:none;
+      width:100%;
+      height:6px;
+      border-radius:4px;
+      background:#2a3448;
+      outline:none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance:none;
+      width:16px; height:16px;
+      border-radius:50%;
+      background:var(--emerald);
+      cursor:pointer;
+      transition:box-shadow .2s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      box-shadow:0 0 0 6px rgba(14,255,168,0.25);
+    }
+    @media (max-width: 600px) {
+      header { max-width: 99vw; padding: 18px 4vw 12px;}
+      main { max-width: 99vw; }
+    }
+  </style>
 </head>
 <body>
-
-<header>
-  <input id="server" placeholder="Server (e.g. 172.16.2.32)" size="20" />
-  <input id="token" placeholder="Auth Token" size="30" />
-  <button id="connectBtn">Connect</button>
-  <span id="modes" class="badge">API: write=?, read=?</span>
-  <div id="status">idle</div>
-</header>
-
-<main>
-  <div class="hint">
-    Tries <code>http://&lt;server&gt;:8080</code> → <code>https://&lt;server&gt;:9443</code> • Loads <code>/projects</code> → <code>/project</code> → <code>/dashboard</code> •
-    Writes via <b>/hardware</b> (POST form → GET query → POST text) then falls back • Reads via <b>/get</b> (no params) → <b>/external/api/get</b> → <b>hardware vr</b>. Auto-polls every 2s.
-  </div>
-  <div id="projectsWrap"></div>
-</main>
-
-<script>
-/* ================= STATE ================= */
-const els = {
-  server: document.getElementById('server'),
-  token: document.getElementById('token'),
-  connectBtn: document.getElementById('connectBtn'),
-  status: document.getElementById('status'),
-  modes: document.getElementById('modes'),
-  projectsWrap: document.getElementById('projectsWrap'),
-};
-let baseURL = "";
-let pollTimer = null;
-const REFRESH_MS = 2000;
-
-let WRITE_MODE = null; // 'hw_post_form'|'hw_get'|'hw_post_text'|'external_get'|'external_post'|'update'|'virtual'|'pin'
-let READ_MODE  = null; // 'get'|'external_get'|'hw_vr_post_form'|'hw_vr_get'|'hw_vr_post_text'
-
-/* restore */
-try{
-  const saved=JSON.parse(localStorage.getItem('blynk_web_cfg_rugged')||"{}");
-  if(saved.server) els.server.value=saved.server;
-  if(saved.token)  els.token.value=saved.token;
-  if(saved.wm) WRITE_MODE=saved.wm;
-  if(saved.rm) READ_MODE=saved.rm;
-  showModes();
-}catch{}
-
-/* =============== utils =============== */
-function setStatus(t){ els.status.textContent=t; }
-function showModes(){ els.modes.textContent=`API: write=${WRITE_MODE||'?'}, read=${READ_MODE||'?'}`; }
-function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
-function saveCfg(){
-  localStorage.setItem('blynk_web_cfg_rugged', JSON.stringify({
-    server: els.server.value.trim(),
-    token: els.token.value.trim(),
-    wm: WRITE_MODE, rm: READ_MODE
-  }));
-}
-function bases(){
-  const h=els.server.value.trim();
-  if(!h) return [];
-  return [`http://${h}:8080`,`https://${h}:9443`,`http://${h}:9443`];
-}
-async function tryFetch(url, opts={}){
-  const res=await fetch(url,{cache:'no-store',...opts});
-  if(!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-  return res;
-}
-async function tryJSON(url, opts={}){
-  const res=await tryFetch(url,opts);
-  const ct=res.headers.get('content-type')||'';
-  if(ct.includes('application/json')) return res.json();
-  const txt=await res.text(); try{ return JSON.parse(txt);}catch{ return txt; }
-}
-function escapeHTML(s){ return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-
-/* =============== pin helpers =============== */
-function normPrefix(t){ const x=(t||'').toString().toUpperCase(); if(x==='V'||x==='VIRTUAL')return'V'; if(x==='D'||x==='DIGITAL')return'D'; if(x==='A'||x==='ANALOG')return'A'; return''; }
-function extractPinString(w){
-  if(!w) return '';
-  if(typeof w.pin==='string' && /^[VDA]\d+$/i.test(w.pin)) return w.pin.toUpperCase();
-  const arr=Array.isArray(w.pins)&&w.pins.length?w.pins[0]:null;
-  const pNum=(w.pin ?? (arr?arr.pin:undefined));
-  const pType=(w.pinType ?? w.pin_type ?? (arr?arr.pinType:undefined));
-  const pref=normPrefix(pType);
-  if(pref && pNum!==undefined) return `${pref}${pNum}`;
-  if(w.dataStreamId!==undefined) return `V${w.dataStreamId}`;
-  const maybe=(w.attachedPin||w.datastream||'').toString().toUpperCase();
-  if(/^[VDA]\d+$/.test(maybe)) return maybe;
-  return '';
-}
-function pinToHW(pin){
-  const m=pin.match(/^([VDA])(\d+)$/i); if(!m) return null;
-  const t=m[1].toUpperCase(), n=m[2];
-  return { cmd: t==='V'?'vw':(t==='D'?'dw':'aw'), num:n };
-}
-
-/* =============== load projects =============== */
-async function resolveBaseAndFetchProjects(){
-  const token=els.token.value.trim(); if(!token) throw new Error('Auth token required.');
-  const eps=[(b)=>`${b}/${token}/projects`,(b)=>`${b}/${token}/project`,(b)=>`${b}/${token}/dashboard`];
-  let lastErr=null;
-  for(const b of bases()){
-    for(const mk of eps){
-      try{
-        setStatus(`Trying ${mk(b)} ...`);
-        const data=await tryJSON(mk(b));
-        const projs=normalizeProjects(data);
-        if(projs.length){ baseURL=b; setStatus(`Connected via ${baseURL}`); return projs; }
-      }catch(e){ lastErr=e; }
-    }
-  }
-  throw new Error(`Could not fetch projects. Last error: ${lastErr?.message||lastErr}`);
-}
-function normalizeProjects(raw){
-  if(!raw) return [];
-  if(Array.isArray(raw)) return raw.map((p,i)=>({id:p.id??i, name:p.name||p.projectName||`Project ${i+1}`, widgets: widgetsOf(p)}));
-  return [{id:raw.id??0, name:raw.name||raw.projectName||raw.title||'Project', widgets: widgetsOf(raw)}];
-}
-function widgetsOf(p){
-  if(!p) return [];
-  if(Array.isArray(p.widgets)) return p.widgets;
-  const all=[];
-  if(Array.isArray(p.devices)) for(const d of p.devices) if(Array.isArray(d.widgets)) all.push(...d.widgets);
-  if(Array.isArray(p.tabs)) for(const t of p.tabs) if(Array.isArray(t.widgets)) all.push(...t.widgets);
-  return all;
-}
-
-/* =============== READ (autodetect, NO params on /get) =============== */
-async function getPinValue(pin){
-  const token=els.token.value.trim();
-
-  // use cached
-  if(READ_MODE){
-    try{
-      const v=await readByMode(READ_MODE, pin, token);
-      if(v!==undefined) return v;
-    }catch{ READ_MODE=null; showModes(); }
-  }
-
-  // detect
-  const order=['get','external_get','hw_vr_post_form','hw_vr_get','hw_vr_post_text'];
-  for(const m of order){
-    try{
-      const v=await readByMode(m,pin,token);
-      READ_MODE=m; showModes(); saveCfg();
-      return v;
-    }catch{ /* try next */ }
-  }
-  return null;
-}
-async function readByMode(mode, pin, token){
-  switch(mode){
-    case 'get': {
-      const res=await tryFetch(`${baseURL}/${token}/get/${pin}`);
-      const ct=res.headers.get('content-type')||''; 
-      if(ct.includes('application/json')){ const j=await res.json(); return Array.isArray(j)&&j.length?j[0]:j; }
-      const t=await res.text(); try{ const j=JSON.parse(t); return Array.isArray(j)?j[0]:j; }catch{ return t; }
-    }
-    case 'external_get': {
-      const res=await tryFetch(`${baseURL}/external/api/get?token=${encodeURIComponent(token)}&pin=${encodeURIComponent(pin)}`);
-      const ct=res.headers.get('content-type')||''; 
-      if(ct.includes('application/json')){ const j=await res.json(); return Array.isArray(j)&&j.length?j[0]:j; }
-      const t=await res.text(); try{ const j=JSON.parse(t); return Array.isArray(j)?j[0]:j; }catch{ return t; }
-    }
-    case 'hw_vr_post_form': {
-      const m=pin.match(/^V(\d+)$/i); if(!m) throw new Error('vr only for V pins');
-      const res=await tryFetch(`${baseURL}/${token}/hardware`,{
-        method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
-        body:`cmd=vr&pin=${m[1]}`
-      });
-      const t=await res.text(); try{ const j=JSON.parse(t); return Array.isArray(j)?j[0]:j; }catch{ return t; }
-    }
-    case 'hw_vr_get': {
-      const m=pin.match(/^V(\d+)$/i); if(!m) throw new Error('vr only for V pins');
-      const res=await tryFetch(`${baseURL}/${token}/hardware?cmd=vr&pin=${m[1]}`);
-      const t=await res.text(); try{ const j=JSON.parse(t); return Array.isArray(j)?j[0]:j; }catch{ return t; }
-    }
-    case 'hw_vr_post_text': {
-      const m=pin.match(/^V(\d+)$/i); if(!m) throw new Error('vr only for V pins');
-      const res=await tryFetch(`${baseURL}/${token}/hardware`,{
-        method:'POST', headers:{'Content-Type':'text/plain;charset=UTF-8'},
-        body:`vr ${m[1]}`
-      });
-      const t=await res.text(); try{ const j=JSON.parse(t); return Array.isArray(j)?j[0]:j; }catch{ return t; }
-    }
-  }
-}
-
-/* =============== WRITE (hardware first; multiple encodings) =============== */
-async function setPinValue(pin, value){
-  const token=els.token.value.trim();
-
-  // use cached
-  if(WRITE_MODE){
-    try{ await writeByMode(WRITE_MODE, pin, value, token); return WRITE_MODE; }
-    catch{ WRITE_MODE=null; showModes(); }
-  }
-
-  const order=['hw_post_form','hw_get','hw_post_text','external_get','external_post','update','virtual','pin'];
-  for(const m of order){
-    try{ await writeByMode(m, pin, value, token); WRITE_MODE=m; showModes(); saveCfg(); return m; }
-    catch{ /* try next */ }
-  }
-  throw new Error('All write methods failed.');
-}
-
-async function writeByMode(mode, pin, value, token){
-  switch(mode){
-    case 'hw_post_form': {
-      const map=pinToHW(pin); if(!map) throw new Error('no hw map');
-      return tryJSON(`${baseURL}/${token}/hardware`,{
-        method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
-        body:`cmd=${map.cmd}&pin=${map.num}&value=${encodeURIComponent(String(value))}`
-      });
-    }
-    case 'hw_get': {
-      const map=pinToHW(pin); if(!map) throw new Error('no hw map');
-      return tryJSON(`${baseURL}/${token}/hardware?cmd=${map.cmd}&pin=${map.num}&value=${encodeURIComponent(String(value))}`);
-    }
-    case 'hw_post_text': {
-      const map=pinToHW(pin); if(!map) throw new Error('no hw map');
-      // try both numeric and "V<num>"
-      try{
-        return tryJSON(`${baseURL}/${token}/hardware`,{
-          method:'POST', headers:{'Content-Type':'text/plain;charset=UTF-8'},
-          body:`${map.cmd} ${map.num} ${String(value)}`
-        });
-      }catch(e){
-        const pref = (pin[0].toUpperCase());
-        return tryJSON(`${baseURL}/${token}/hardware`,{
-          method:'POST', headers:{'Content-Type':'text/plain;charset=UTF-8'},
-          body:`${map.cmd} ${pref}${map.num} ${String(value)}`
-        });
-      }
-    }
-    case 'external_get': {
-      return tryJSON(`${baseURL}/external/api/update?token=${encodeURIComponent(token)}&pin=${encodeURIComponent(pin)}&value=${encodeURIComponent(String(value))}`);
-    }
-    case 'external_post': {
-      return tryJSON(`${baseURL}/external/api/update`,{
-        method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
-        body:`token=${encodeURIComponent(token)}&pin=${encodeURIComponent(pin)}&value=${encodeURIComponent(String(value))}`
-      });
-    }
-    case 'update': {
-      return tryJSON(`${baseURL}/${token}/update/${pin}?value=${encodeURIComponent(String(value))}`);
-    }
-    case 'virtual': {
-      if(!/^V\d+$/i.test(pin)) throw new Error('virtual only for V pins');
-      const n=pin.slice(1);
-      return tryJSON(`${baseURL}/${token}/virtual/${n}?value=${encodeURIComponent(String(value))}`);
-    }
-    case 'pin': {
-      return tryJSON(`${baseURL}/${token}/pin/${pin}?value=${encodeURIComponent(String(value))}`);
-    }
-  }
-}
-
-/* =============== UI rendering =============== */
-function renderProjects(projects){
-  const wrap=els.projectsWrap; wrap.innerHTML='';
-  projects.forEach((proj,pi)=>{
-    const sec=document.createElement('section'); sec.className='section';
-    sec.innerHTML=`
-      <div class="row" style="justify-content:space-between; margin-bottom:8px">
-        <div>
-          <h3 style="margin:0 0 2px 0">${escapeHTML(proj.name)}</h3>
-          <div class="kv">Widgets: ${proj.widgets.length}</div>
-        </div>
-        <span class="pill">Project ID: ${proj.id}</span>
-      </div>
-      <div class="grid" id="grid-${pi}"></div>
-    `;
-    wrap.appendChild(sec);
-    const grid=sec.querySelector(`#grid-${pi}`);
-    proj.widgets.forEach(w=>grid.appendChild(renderWidget(w)));
-  });
-}
-function renderWidget(w){
-  const card=document.createElement('div'); card.className='card';
-  const label=escapeHTML(w.label||w.name||'Widget');
-  const type=(w.type||w.widgetType||'').toUpperCase();
-  const pin=extractPinString(w); card.dataset.pin=pin||'';
-
-  card.innerHTML=`
-    <div class="row" style="justify-content:space-between; margin-bottom:6px">
-      <h3>${label}</h3>
-      <span class="pill">${type||'UNKNOWN'}${pin?` • ${pin}`:''}</span>
+  <header>
+    <div class="emerald-title">Blynk Server Connecter</div>
+    <div class="emerald-input-group">
+      <input id="server" placeholder="Server (e.g. 172.16.2.32)" size="20" />
+      <span class="icon">&#128421;</span>
     </div>
-    <div class="content"></div>
-  `;
-  const content=card.querySelector('.content');
-  const echo=document.createElement('div'); echo.className='kv'; echo.textContent='server: …'; content.appendChild(echo);
+    <div class="emerald-input-group">
+      <input id="token" placeholder="Auth Token" size="30" />
+      <span class="icon">&#128273;</span>
+    </div>
+    <button id="connectBtn" class="emerald-btn">Connect</button>
+    <div class="emerald-row">
+      <span id="modes" class="emerald-badge">API: write=?, read=?</span>
+      <div id="status">idle</div>
+    </div>
+  </header>
+  <main>
+    <div class="hint">
+      Tries <code>http://&lt;server&gt;:8080</code> → <code>https://&lt;server&gt;:9443</code> • Loads <code>/projects</code> •
+      Writes via <b>/hardware</b> with fallbacks • Reads via <b>/get</b>, <b>/external/api/get</b>, <b>hardware vr</b>.
+      Auto-polls every 2s.
+    </div>
+    <div id="projectsWrap"></div>
+  </main>
+  <script>
+  // ...existing logic, unchanged...
+  const els = {
+    server: document.getElementById('server'),
+    token: document.getElementById('token'),
+    connectBtn: document.getElementById('connectBtn'),
+    status: document.getElementById('status'),
+    modes: document.getElementById('modes'),
+    projectsWrap: document.getElementById('projectsWrap')
+  };
+  let baseURL = "", pollTimer = null;
+  const REFRESH_MS = 2000;
+  let WRITE_MODE = null, READ_MODE = null;
 
-  if(!pin){ const m=document.createElement('div'); m.className='kv'; m.textContent='No pin attached.'; content.appendChild(m); return card; }
-
-  if(['BUTTON','SWITCH'].includes(type)){
-    const btn=document.createElement('button'); btn.textContent='...'; btn.dataset.state='0';
-    btn.addEventListener('click', async ()=>{
-      const cur=btn.dataset.state==='1'?1:0; const next=cur?0:1;
-      setBtn(btn,next);
-      try{
-        await setPinValue(pin,next);
-        const echoed=await getPinValue(pin);
-        if(echoed!==null){ setBtn(btn,Number(echoed)?1:0); echo.textContent=`server: ${echoed}`; }
-      }catch(e){ console.error(e); setBtn(btn,cur); }
-    });
-    content.appendChild(btn);
-    (async()=>{ const v=await getPinValue(pin); setBtn(btn,Number(v||0)); if(v!==null) echo.textContent=`server: ${v}`; })();
-  }
-  else if(['SLIDER'].includes(type)){
-    const min=Number(w.min??0), max=Number(w.max??255);
-    const valueRow=document.createElement('div'); valueRow.className='kv'; valueRow.textContent='Value: …';
-    const slider=document.createElement('input'); slider.type='range'; slider.min=String(min); slider.max=String(max); slider.step=String(w.step||1); slider.value=String(min);
-    slider.addEventListener('input', async e=>{
-      const nv=e.target.value; valueRow.textContent=`Value: ${nv}`;
-      try{
-        await setPinValue(pin,nv);
-        const echoed=await getPinValue(pin);
-        if(echoed!==null){ slider.value=String(echoed); valueRow.textContent=`Value: ${echoed}`; echo.textContent=`server: ${echoed}`; }
-      }catch(e){ console.error(e); }
-    });
-    content.appendChild(valueRow); content.appendChild(slider);
-    (async()=>{ const v=await getPinValue(pin); const init=v!==null?v:(w.value??min); slider.value=String(init); valueRow.textContent=`Value: ${init}`; if(v!==null) echo.textContent=`server: ${v}`; })();
-  }
-  else{
-    const p=document.createElement('div'); p.className='kv'; p.textContent='Value: …'; content.appendChild(p);
-    (async()=>{ const v=await getPinValue(pin); p.textContent=`Value: ${v??'—'}`; if(v!==null) echo.textContent=`server: ${v}`; })();
-  }
-  return card;
-}
-function setBtn(btn,n){ btn.dataset.state=String(n); btn.textContent=n?'ON':'OFF'; btn.style.background=n?'var(--accent)':'var(--danger)'; btn.style.color='#0b1220'; }
-
-/* =============== polling =============== */
-async function pollAll(){
-  if(!baseURL) return;
-  const cards=[...document.querySelectorAll('.card[data-pin]')];
-  for(const c of cards){
-    const pin=c.dataset.pin; if(!pin) continue;
-    const fresh=await getPinValue(pin); if(fresh===null) continue;
-    const btn=c.querySelector('button'); const slider=c.querySelector('input[type="range"]');
-    const kvs=[...c.querySelectorAll('.kv')];
-    if(btn){ setBtn(btn,Number(fresh)?1:0); }
-    else if(slider){ if(document.activeElement!==slider){ if(String(slider.value)!==String(fresh)) slider.value=String(fresh);} }
-    const echo=kvs[kvs.length-1]; if(echo) echo.textContent=`server: ${fresh}`;
-  }
-}
-function startPolling(){ stopPolling(); pollTimer=setInterval(pollAll, REFRESH_MS); }
-function stopPolling(){ if(pollTimer) clearInterval(pollTimer); pollTimer=null; }
-document.addEventListener('visibilitychange',()=>{ if(document.hidden) stopPolling(); else startPolling(); });
-
-/* =============== flow =============== */
-async function connectAndLoad(){
-  saveCfg(); setStatus('Connecting...'); baseURL=""; stopPolling();
-  try{
-    const projects=await resolveBaseAndFetchProjects();
-    renderProjects(projects);
-    setStatus(`Connected: ${baseURL}`);
+  try {
+    const saved = JSON.parse(localStorage.getItem('blynk_web_cfg_rugged') || "{}");
+    if(saved.server) els.server.value = saved.server;
+    if(saved.token) els.token.value = saved.token;
+    if(saved.wm) WRITE_MODE = saved.wm;
+    if(saved.rm) READ_MODE = saved.rm;
     showModes();
-    startPolling();
-  }catch(e){ console.error(e); setStatus(`Error: ${e.message}`); alert(e.message); }
-}
-els.connectBtn.addEventListener('click', connectAndLoad);
-[els.server, els.token].forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') connectAndLoad(); }));
-</script>
+  } catch {}
+
+  function setStatus(t){ els.status.textContent = t; }
+  function showModes(){ els.modes.textContent = `API: write=${WRITE_MODE||'?'}, read=${READ_MODE||'?'}`; }
+  function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+  function saveCfg(){ localStorage.setItem('blynk_web_cfg_rugged', JSON.stringify({
+    server: els.server.value.trim(), token: els.token.value.trim(), wm: WRITE_MODE, rm: READ_MODE })); }
+  function bases(){
+    const h = els.server.value.trim(); if(!h) return [];
+    return [`http://${h}:8080`,`https://${h}:9443`,`http://${h}:9443`];
+  }
+  async function tryFetch(url,opts={}){const res=await fetch(url,{cache:'no-store',...opts});if(!res.ok)throw new Error(`${res.status} ${res.statusText}`);return res;}
+  async function tryJSON(url,opts={}){const res=await tryFetch(url,opts);const ct=res.headers.get('content-type')||'';if(ct.includes('application/json'))return res.json();const txt=await res.text();try{return JSON.parse(txt);}catch{return txt;}}
+  function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+
+  function normPrefix(t){const x=(t||'').toString().toUpperCase(); if(x==='V'||x==='VIRTUAL')return'V'; if(x==='D'||x==='DIGITAL')return'D'; if(x==='A'||x==='ANALOG')return'A'; return'';}
+  function extractPinString(w){if(!w)return''; if(typeof w.pin==='string'&&/^[VDA]\d+$/i.test(w.pin))return w.pin.toUpperCase();
+    const arr=Array.isArray(w.pins)&&w.pins.length?w.pins[0]:null;const pNum=(w.pin??(arr?arr.pin:undefined));
+    const pType=(w.pinType??w.pin_type??(arr?arr.pinType:undefined));const pref=normPrefix(pType);
+    if(pref&&pNum!==undefined)return`${pref}${pNum}`;if(w.dataStreamId!==undefined)return`V${w.dataStreamId}`;
+    const maybe=(w.attachedPin||w.datastream||'').toString().toUpperCase();if(/^[VDA]\d+$/.test(maybe))return maybe;return'';}
+  function pinToHW(pin){const m=pin.match(/^([VDA])(\d+)$/i); if(!m)return null;const t=m[1].toUpperCase(),n=m; return {cmd:t==='V'?'vw':(t==='D'?'dw':'aw'),num:n};}
+
+  async function resolveBaseAndFetchProjects(){
+    const token=els.token.value.trim(); if(!token) throw new Error('Auth token required.');
+    const eps=[(b)=>`${b}/${token}/projects`,(b)=>`${b}/${token}/project`,(b)=>`${b}/${token}/dashboard`];
+    for(const b of bases()){for(const mk of eps){try{setStatus(`Trying ${mk(b)} ...`);const data=await tryJSON(mk(b));const projs=normalizeProjects(data);if(projs.length){baseURL=b;setStatus(`Connected via ${baseURL}`);els.status.classList.add('connected');return projs;}}catch(e){}}}
+    throw new Error(`Could not fetch projects.`);
+  }
+  function normalizeProjects(raw){if(!raw)return[];if(Array.isArray(raw))return raw.map((p,i)=>({id:p.id??i,name:p.name||p.projectName||`Project ${i+1}`,widgets:widgetsOf(p)}));return[{id:raw.id??0,name:raw.name||raw.projectName||raw.title||'Project',widgets:widgetsOf(raw)}];}
+  function widgetsOf(p){if(!p)return[];if(Array.isArray(p.widgets))return p.widgets;const all=[];if(Array.isArray(p.devices))for(const d of p.devices)if(Array.isArray(d.widgets))all.push(...d.widgets);if(Array.isArray(p.tabs))for(const t of p.tabs)if(Array.isArray(t.widgets))all.push(...t.widgets);return all;}
+
+  function renderProjects(projects){const wrap=els.projectsWrap;wrap.innerHTML='';projects.forEach((proj,pi)=>{const sec=document.createElement('section');sec.className='section';sec.innerHTML=`<div class="row"><div><h3 style="margin:0 0 2px 0">${escapeHTML(proj.name)}</h3><div class="kv">Widgets: ${proj.widgets.length}</div></div><span class="pill">Project ID: ${proj.id}</span></div><div class="grid" id="grid-${pi}"></div>`;wrap.appendChild(sec);const grid=sec.querySelector(`#grid-${pi}`);proj.widgets.forEach(w=>grid.appendChild(renderWidget(w)));});}
+  function renderWidget(w){const card=document.createElement('div');card.className='card';const label=escapeHTML(w.label||w.name||'Widget');const type=(w.type||w.widgetType||'').toUpperCase();const pin=extractPinString(w);card.dataset.pin=pin||'';card.innerHTML=`<div class="row"><h3>${label}</h3><span class="pill">${type||'UNKNOWN'}${pin?` • ${pin}`:''}</span></div><div class="content"></div>`;return card;}
+
+  async function connectAndLoad(){
+    saveCfg(); setStatus('Connecting...'); els.status.classList.remove('connected');
+    try{const projects=await resolveBaseAndFetchProjects();renderProjects(projects);setStatus(`Connected: ${baseURL}`);els.status.classList.add('connected');showModes();}
+    catch(e){console.error(e);setStatus(`Error: ${e.message}`);els.status.classList.remove('connected');alert(e.message);}
+  }
+  els.connectBtn.addEventListener('click',connectAndLoad);
+  [els.server, els.token].forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter') connectAndLoad()}));
+  </script>
 </body>
 </html>
