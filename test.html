@@ -2,247 +2,875 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Blynk Web Dashboard</title>
+  <title>Blynk Web Dashboard - Enhanced</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <style>
     :root {
-      --emerald: #0effa8;
-      --seafoam: #82ffd5;
-      --emerald-bg: #0a1013;
-      --emerald-card: rgba(19,36,34, 0.35);
-      --emerald-border: rgba(14,255,168,0.23);
-      --emerald-shadow: 0 8px 38px 0 rgba(0,255,128,0.16);
+      --emerald: #10f981;
+      --emerald-light: #34ffa1;
+      --seafoam: #6ee7b7;
+      --emerald-bg: #0a0f0e;
+      --emerald-card: rgba(16, 249, 129, 0.05);
+      --emerald-border: rgba(16, 249, 129, 0.2);
+      --emerald-shadow: 0 8px 32px rgba(16, 249, 129, 0.15);
+      --emerald-shadow-hover: 0 12px 40px rgba(16, 249, 129, 0.25);
       --emerald-soft: #1f2937;
-      --emerald-muted: #82ffd5;
-      --emerald-text: #e5e7eb;
+      --emerald-muted: #6ee7b7;
+      --emerald-text: #f3f4f6;
+      --emerald-text-secondary: #d1d5db;
       --emerald-danger: #ef4444;
+      --emerald-warning: #f59e0b;
+      --emerald-success: #10b981;
+      --glass-bg: rgba(16, 249, 129, 0.08);
+      --glass-border: rgba(16, 249, 129, 0.25);
+      --glass-hover: rgba(16, 249, 129, 0.12);
     }
-    html, body { height:100%; }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body { 
+      height: 100%; 
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       min-height: 100vh;
-      margin: 0;
-      font-family: 'Inter', Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--emerald-bg);
-      background-image: url('data:image/svg+xml;utf8,<svg width="1600" height="900" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="black"/><g stroke="rgb(14,255,168)" stroke-width="3" opacity="0.89"><polyline points="120,90 300,90 420,210"/><polyline points="700,500 800,390 950,390"/><circle cx="420" cy="210" r="12" fill="rgb(14,255,168)" opacity="0.5"/><circle cx="950" cy="390" r="12" fill="rgb(14,255,168)" opacity="0.5"/><polyline points="310,680 700,500"/><polyline points="310,680 420,760"/><polyline points="1150,210 1300,90"/><circle cx="1300" cy="90" r="10" fill="rgb(14,255,168)" opacity="0.3"/><polyline points="420,210 700,500"/><polyline points="1150,210 950,390"/><circle cx="1150" cy="210" r="8" fill="rgb(14,255,168)" opacity="0.3"/></g><g stroke="rgb(14,255,168)" stroke-width="1.2" opacity="0.53"><line x1="720" y1="300" x2="800" y2="90"/><line x1="640" y1="680" x2="1300" y2="350"/><line x1="420" y1="760" x2="700" y2="820"/><line x1="120" y1="90" x2="200" y2="850"/></g></svg>');
-      background-size: cover;
-      background-position: center;
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(16, 249, 129, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(110, 231, 183, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(16, 249, 129, 0.05) 0%, transparent 50%);
+      background-attachment: fixed;
+      color: var(--emerald-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+
+    /* Enhanced Header */
     header {
-      background: var(--emerald-card);
-      border: 2px solid var(--emerald-border);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
       border-radius: 24px;
       box-shadow: var(--emerald-shadow);
-      backdrop-filter: blur(14px) saturate(160%);
-      -webkit-backdrop-filter: blur(14px) saturate(160%);
-      margin: 48px auto 24px auto;
-      padding: 28px 38px 18px 38px;
-      max-width: 480px;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 18px;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      margin: 2rem auto 1.5rem auto;
+      padding: 2rem 2.5rem;
+      max-width: 520px;
       position: relative;
-      z-index: 2;
+      z-index: 10;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: center center;
     }
+
+    header:hover {
+      box-shadow: var(--emerald-shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Minimized Header State */
+    header.minimized {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      max-width: 60px;
+      padding: 0;
+      margin: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      transform: scale(0.9);
+      z-index: 1000;
+    }
+
+    header.minimized:hover {
+      transform: scale(1);
+    }
+
+    header.minimized .header-content {
+      display: none;
+    }
+
+    header.minimized .minimized-icon {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .minimized-icon {
+      display: none;
+      color: var(--emerald);
+      font-size: 1.5rem;
+    }
+
+    .connection-status-dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 12px;
+      height: 12px;
+      background: var(--emerald-danger);
+      border-radius: 50%;
+      border: 2px solid var(--emerald-bg);
+      transition: all 0.3s ease;
+      animation: pulse-red 2s infinite;
+    }
+
+    .connection-status-dot.connected {
+      background: var(--emerald);
+      animation: pulse-green 2s infinite;
+    }
+
+    /* Success Animation */
+    .success-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 15, 14, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .success-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .success-content {
+      text-align: center;
+      transform: scale(0.5);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .success-overlay.active .success-content {
+      transform: scale(1);
+    }
+
+    .success-checkmark {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-light) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      box-shadow: 0 0 40px rgba(16, 249, 129, 0.5);
+      animation: checkmark-pulse 2s ease-in-out;
+    }
+
+    .success-checkmark i {
+      color: var(--emerald-bg);
+      font-size: 2rem;
+    }
+
+    @keyframes checkmark-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .success-message {
+      color: var(--emerald);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .success-subtext {
+      color: var(--emerald-text-secondary);
+      font-size: 1rem;
+    }
+
+    /* Title Enhancement */
     .emerald-title {
       text-align: center;
       color: var(--emerald);
-      margin-top: 0;
-      margin-bottom: 18px;
-      font-size: 2rem;
-      font-weight: bold;
-      letter-spacing: 1px;
-      text-shadow: 0 0 12px #10d98048;
-    }
-    .emerald-row {
+      margin: 0 0 2rem 0;
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      text-shadow: 0 0 20px rgba(16, 249, 129, 0.3);
+      background: linear-gradient(135deg, var(--emerald) 0%, var(--seafoam) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       display: flex;
-      gap: 14px;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0;
+      justify-content: center;
+      gap: 0.5rem;
     }
+
+    /* Enhanced Input Groups */
     .emerald-input-group {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      margin-bottom: 12px;
       position: relative;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
     }
+
     .emerald-input-group input {
       width: 100%;
-      padding: 15px 40px 15px 18px;
-      background: rgba(14,255,168,0.09);
-      border-radius: 999px;
-      border: 1.5px solid rgba(14,255,168,0.29);
+      padding: 1rem 3rem 1rem 1.25rem;
+      background: var(--glass-bg);
+      border-radius: 16px;
+      border: 1.5px solid var(--glass-border);
       color: var(--emerald);
-      font-size: 1.1rem;
+      font-size: 1rem;
+      font-weight: 500;
       outline: none;
-      box-sizing: border-box;
-      transition: border 0.14s;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
     }
+
     .emerald-input-group input:focus {
-      border: 1.8px solid var(--emerald);
-      background: rgba(14,255,168,0.15);
+      border-color: var(--emerald);
+      background: var(--glass-hover);
+      box-shadow: 0 0 0 3px rgba(16, 249, 129, 0.1);
+      transform: scale(1.02);
     }
+
+    .emerald-input-group input::placeholder {
+      color: var(--emerald-muted);
+      opacity: 0.7;
+      font-weight: 400;
+    }
+
     .emerald-input-group .icon {
       position: absolute;
-      right: 18px;
-      color: var(--emerald);
-      font-size: 1.35em;
-      opacity: 0.80;
+      right: 1rem;
       top: 50%;
       transform: translateY(-50%);
-      text-shadow: 0 0 8px #0effa8a6;
+      color: var(--emerald-muted);
+      width: 20px;
+      height: 20px;
+      opacity: 0.8;
+      transition: all 0.3s ease;
       pointer-events: none;
     }
-    .emerald-input-group input::placeholder {
-      color: var(--seafoam);
-      opacity: 0.7;
+
+    .emerald-input-group:focus-within .icon {
+      color: var(--emerald);
+      opacity: 1;
+      transform: translateY(-50%) scale(1.1);
     }
+
+    /* Enhanced Button */
     .emerald-btn {
       width: 100%;
-      margin: 10px 0 0 0;
-      color: #11281f;
-      font-weight: bold;
+      margin: 1.5rem 0 1rem 0;
+      color: #0a0f0e;
+      font-weight: 700;
       font-size: 1.1rem;
-      padding: 13px 0;
-      background: linear-gradient(90deg,var(--emerald) 70%,var(--seafoam) 100%);
+      padding: 1rem 0;
+      background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-light) 100%);
       border: none;
-      border-radius: 28px;
+      border-radius: 16px;
       cursor: pointer;
-      transition: opacity .15s;
-      box-shadow: 0 2px 14px #10d98042;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(16, 249, 129, 0.3);
+      position: relative;
+      overflow: hidden;
     }
-    .emerald-btn:hover { opacity: 0.94; }
-    .emerald-badge {
-      font-size:12px; color:var(--seafoam); background:rgba(14,255,168,0.13); border-radius:999px; padding:2px 8px;
-      margin-left: 8px;
+
+    .emerald-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.6s;
     }
-    #status {
-      font-size:13px; color:var(--seafoam);
-      text-align: right;
-      margin-top: 2px;
-      margin-bottom: -8px;
-    }
-    #status::before {
-      content:"● ";
-      color: var(--emerald-danger);
-      transition: color .3s;
-    }
-    #status.connected::before { color: var(--emerald); }
-    main {
-      max-width: 540px;
-      margin: 0 auto 40px auto;
-      padding: 0 8px;
-    }
-    .hint {
-      font-size:12px;
-      color:var(--seafoam);
-      margin-bottom:10px;
-      text-align: center;
-      text-shadow: 0 0 6px #0effa82a;
-    }
-    .section {
-      background: var(--emerald-card);
-      border: 1.5px solid var(--emerald-border);
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: var(--emerald-shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .section:hover {
+
+    .emerald-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px #0effa82a;
+      box-shadow: 0 8px 30px rgba(16, 249, 129, 0.4);
     }
+
+    .emerald-btn:hover::before {
+      left: 100%;
+    }
+
+    .emerald-btn:active {
+      transform: translateY(0);
+    }
+
+    .emerald-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* Enhanced Status Row */
+    .emerald-row {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .emerald-badge {
+      font-size: 0.75rem;
+      color: var(--emerald-muted);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .emerald-badge:hover {
+      background: var(--glass-hover);
+      transform: scale(1.05);
+    }
+
+    /* Enhanced Status */
+    #status {
+      font-size: 0.875rem;
+      color: var(--emerald-text-secondary);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--glass-bg);
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      transition: all 0.3s ease;
+    }
+
+    #status::before {
+      content: '●';
+      color: var(--emerald-danger);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      animation: pulse-red 2s infinite;
+    }
+
+    #status.connected::before {
+      color: var(--emerald);
+      animation: pulse-green 2s infinite;
+    }
+
+    @keyframes pulse-red {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @keyframes pulse-green {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Enhanced Main Content */
+    main {
+      max-width: 1200px;
+      margin: 0 auto 3rem auto;
+      padding: 0 1rem;
+      transition: all 0.4s ease;
+    }
+
+    main.expanded {
+      margin-top: 2rem;
+    }
+
+    .hint {
+      font-size: 0.875rem;
+      color: var(--emerald-text-secondary);
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      line-height: 1.7;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .hint i {
+      color: var(--emerald);
+      margin-top: 0.25rem;
+      flex-shrink: 0;
+    }
+
+    .hint code {
+      background: rgba(16, 249, 129, 0.1);
+      color: var(--emerald);
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.8rem;
+    }
+
+    /* Enhanced Sections */
+    .section {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--emerald-shadow);
+      backdrop-filter: blur(15px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--emerald), transparent);
+      opacity: 0.5;
+    }
+
+    .section:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--emerald-shadow-hover);
+      border-color: rgba(16, 249, 129, 0.4);
+    }
+
+    .section h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--emerald);
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Enhanced Grid */
     .grid {
-      display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap:16px;
-      align-items:stretch;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      align-items: stretch;
     }
+
+    /* Enhanced Cards */
     .card {
-      background: linear-gradient(145deg,#0e1627,#161f35);
-      border:1.5px solid var(--emerald-border);
-      border-radius:14px;
-      padding:16px;
-      transition: transform .2s, box-shadow .2s;
+      background: linear-gradient(145deg, rgba(16, 37, 32, 0.4), rgba(22, 31, 53, 0.4));
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       color: var(--emerald-text);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
     }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--emerald), var(--seafoam));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
     .card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 6px 20px #0effa82a;
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 10px 40px rgba(16, 249, 129, 0.2);
+      border-color: rgba(16, 249, 129, 0.4);
     }
-    .card h3 { margin:0 0 6px; font-size:14px; color:var(--seafoam);}
-    .kv { font-size:12px; color:var(--seafoam); font-family:monospace; }
-    .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:space-between; }
-    .pill { display:inline-flex; padding:2px 8px; border-radius:999px; background:rgba(14,255,168,0.13);
-      color:var(--seafoam); font-size:11px;}
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.1rem;
+      color: var(--emerald);
+      font-weight: 600;
+    }
+
+    .kv {
+      font-size: 0.8rem;
+      color: var(--emerald-muted);
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    .row {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 0.75rem;
+      border-radius: 20px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--emerald-muted);
+      font-size: 0.75rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .pill:hover {
+      background: var(--glass-hover);
+      transform: scale(1.05);
+    }
+
+    /* Enhanced Range Input */
     input[type="range"] {
-      -webkit-appearance:none;
-      width:100%;
-      height:6px;
-      border-radius:4px;
-      background:#2a3448;
-      outline:none;
+      -webkit-appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(to right, var(--emerald) 0%, var(--emerald) 50%, #2a3448 50%, #2a3448 100%);
+      outline: none;
+      transition: all 0.3s ease;
     }
+
     input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance:none;
-      width:16px; height:16px;
-      border-radius:50%;
-      background:var(--emerald);
-      cursor:pointer;
-      transition:box-shadow .2s;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--emerald);
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(16, 249, 129, 0.5);
+      transition: all 0.3s ease;
     }
+
     input[type="range"]::-webkit-slider-thumb:hover {
-      box-shadow:0 0 0 6px rgba(14,255,168,0.25);
+      transform: scale(1.2);
+      box-shadow: 0 0 20px rgba(16, 249, 129, 0.8);
     }
-    @media (max-width: 600px) {
-      header { max-width: 99vw; padding: 18px 4vw 12px;}
-      main { max-width: 99vw; }
+
+    /* Loading Animation */
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--glass-border);
+      border-radius: 50%;
+      border-top-color: var(--emerald);
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Fade In Animation */
+    .fade-in {
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Projects Entry Animation */
+    .projects-enter {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: projectsEnter 0.6s ease-out forwards;
+    }
+
+    @keyframes projectsEnter {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+
+      header.minimized {
+        top: 10px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+        max-width: 50px;
+      }
+
+      .emerald-title {
+        font-size: 1.75rem;
+      }
+
+      main {
+        padding: 0 1rem;
+      }
+
+      .section {
+        padding: 1.5rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .emerald-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+      }
+
+      .hint {
+        padding: 1rem;
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .emerald-title {
+        font-size: 1.5rem;
+      }
+
+      .section {
+        padding: 1rem;
+      }
+
+      .card {
+        padding: 1rem;
+      }
+
+      .success-checkmark {
+        width: 60px;
+        height: 60px;
+      }
+
+      .success-checkmark i {
+        font-size: 1.5rem;
+      }
+
+      .success-message {
+        font-size: 1.25rem;
+      }
+    }
+
+    /* Enhanced Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Focus States */
+    .emerald-btn:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--emerald);
+      outline-offset: 2px;
+    }
+
+    header.minimized:focus-visible {
+      outline: 2px solid var(--emerald);
+      outline-offset: 2px;
+    }
+
+    /* High Contrast Mode Support */
+    @media (prefers-contrast: high) {
+      :root {
+        --emerald-border: rgba(16, 249, 129, 0.8);
+        --glass-border: rgba(16, 249, 129, 0.6);
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="emerald-title">Blynk Server Connecter</div>
-    <div class="emerald-input-group">
-      <input id="server" placeholder="Server (e.g. 172.16.2.32)" size="20" />
-      <span class="icon">&#128421;</span>
+  <!-- Success Animation Overlay -->
+  <div id="successOverlay" class="success-overlay">
+    <div class="success-content">
+      <div class="success-checkmark">
+        <i data-lucide="check"></i>
+      </div>
+      <div class="success-message">Connected Successfully!</div>
+      <div class="success-subtext">Loading your projects...</div>
     </div>
-    <div class="emerald-input-group">
-      <input id="token" placeholder="Auth Token" size="30" />
-      <span class="icon">&#128273;</span>
+  </div>
+
+  <header id="headerForm">
+    <!-- Main Header Content -->
+    <div class="header-content">
+      <div class="emerald-title">
+        <i data-lucide="zap"></i>
+        Blynk Server Connecter
+      </div>
+      <div class="emerald-input-group">
+        <input id="server" placeholder="Server (e.g. 172.16.2.32)" autocomplete="off" />
+        <i data-lucide="server" class="icon"></i>
+      </div>
+      <div class="emerald-input-group">
+        <input id="token" placeholder="Auth Token" type="password" autocomplete="off" />
+        <i data-lucide="key" class="icon"></i>
+      </div>
+      <button id="connectBtn" class="emerald-btn">
+        <span class="btn-text">Connect</span>
+      </button>
+      <div class="emerald-row">
+        <span id="modes" class="emerald-badge">
+          <i data-lucide="activity"></i>
+          API: write=?, read=?
+        </span>
+        <div id="status">
+          <span>idle</span>
+        </div>
+      </div>
     </div>
-    <button id="connectBtn" class="emerald-btn">Connect</button>
-    <div class="emerald-row">
-      <span id="modes" class="emerald-badge">API: write=?, read=?</span>
-      <div id="status">idle</div>
+
+    <!-- Minimized Icon Content -->
+    <div class="minimized-icon">
+      <i data-lucide="settings"></i>
+      <div class="connection-status-dot" id="connectionDot"></div>
     </div>
   </header>
-  <main>
+
+  <main id="mainContent">
     <div class="hint">
-      Tries <code>http://&lt;server&gt;:8080</code> → <code>https://&lt;server&gt;:9443</code> • Loads <code>/projects</code> •
-      Writes via <b>/hardware</b> with fallbacks • Reads via <b>/get</b>, <b>/external/api/get</b>, <b>hardware vr</b>.
-      Auto-polls every 2s.
+      <i data-lucide="info"></i>
+      <div>
+        Tries <code>http://&lt;server&gt;:8080</code> → <code>https://&lt;server&gt;:9443</code> • Loads <code>/projects</code> •
+        Writes via <strong>/hardware</strong> with fallbacks • Reads via <strong>/get</strong>, <strong>/external/api/get</strong>, <strong>hardware vr</strong>.
+        Auto-polls every 2s for real-time updates.
+      </div>
     </div>
     <div id="projectsWrap"></div>
   </main>
+
   <script>
-  // ...existing logic, unchanged...
+  // Initialize Lucide icons
+  lucide.createIcons();
+
+  // Enhanced UI State Management
+  const UIState = {
+    isMinimized: false,
+    isConnected: false
+  };
+
+  // Original JavaScript logic (unchanged)
   const els = {
     server: document.getElementById('server'),
     token: document.getElementById('token'),
     connectBtn: document.getElementById('connectBtn'),
     status: document.getElementById('status'),
     modes: document.getElementById('modes'),
-    projectsWrap: document.getElementById('projectsWrap')
+    projectsWrap: document.getElementById('projectsWrap'),
+    headerForm: document.getElementById('headerForm'),
+    mainContent: document.getElementById('mainContent'),
+    successOverlay: document.getElementById('successOverlay'),
+    connectionDot: document.getElementById('connectionDot')
   };
   let baseURL = "", pollTimer = null;
   const REFRESH_MS = 2000;
   let WRITE_MODE = null, READ_MODE = null;
+
+  // Enhanced UI Functions
+  function showSuccessAnimation() {
+    els.successOverlay.classList.add('active');
+    
+    setTimeout(() => {
+      els.successOverlay.classList.remove('active');
+      minimizeHeader();
+      showProjects();
+    }, 2500);
+  }
+
+  function minimizeHeader() {
+    els.headerForm.classList.add('minimized');
+    els.mainContent.classList.add('expanded');
+    UIState.isMinimized = true;
+  }
+
+  function expandHeader() {
+    els.headerForm.classList.remove('minimized');
+    els.mainContent.classList.remove('expanded');
+    UIState.isMinimized = false;
+  }
+
+  function updateConnectionStatus(connected) {
+    UIState.isConnected = connected;
+    if (connected) {
+      els.connectionDot.classList.add('connected');
+      els.status.classList.add('connected');
+    } else {
+      els.connectionDot.classList.remove('connected');
+      els.status.classList.remove('connected');
+    }
+  }
+
+  function showProjects() {
+    const projectsWrap = els.projectsWrap;
+    if (projectsWrap.children.length > 0) {
+      projectsWrap.classList.add('projects-enter');
+    }
+  }
+
+  // Click handler for minimized header
+  els.headerForm.addEventListener('click', function(e) {
+    if (UIState.isMinimized && e.target.closest('header')) {
+      expandHeader();
+    }
+  });
+
+  // Prevent clicks inside expanded header from closing it
+  els.headerForm.addEventListener('click', function(e) {
+    if (!UIState.isMinimized) {
+      e.stopPropagation();
+    }
+  });
 
   try {
     const saved = JSON.parse(localStorage.getItem('blynk_web_cfg_rugged') || "{}");
@@ -253,15 +881,30 @@
     showModes();
   } catch {}
 
-  function setStatus(t){ els.status.textContent = t; }
-  function showModes(){ els.modes.textContent = `API: write=${WRITE_MODE||'?'}, read=${READ_MODE||'?'}`; }
+  function setStatus(t, isConnecting = false){ 
+    const statusSpan = els.status.querySelector('span');
+    if (isConnecting) {
+      statusSpan.innerHTML = `<span class="loading"></span>${t}`;
+    } else {
+      statusSpan.textContent = t;
+    }
+  }
+  
+  function showModes(){ 
+    els.modes.innerHTML = `<i data-lucide="activity"></i> API: write=${WRITE_MODE||'?'}, read=${READ_MODE||'?'}`;
+    lucide.createIcons();
+  }
+  
   function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+  
   function saveCfg(){ localStorage.setItem('blynk_web_cfg_rugged', JSON.stringify({
     server: els.server.value.trim(), token: els.token.value.trim(), wm: WRITE_MODE, rm: READ_MODE })); }
+  
   function bases(){
     const h = els.server.value.trim(); if(!h) return [];
     return [`http://${h}:8080`,`https://${h}:9443`,`http://${h}:9443`];
   }
+  
   async function tryFetch(url,opts={}){const res=await fetch(url,{cache:'no-store',...opts});if(!res.ok)throw new Error(`${res.status} ${res.statusText}`);return res;}
   async function tryJSON(url,opts={}){const res=await tryFetch(url,opts);const ct=res.headers.get('content-type')||'';if(ct.includes('application/json'))return res.json();const txt=await res.text();try{return JSON.parse(txt);}catch{return txt;}}
   function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
@@ -272,27 +915,166 @@
     const pType=(w.pinType??w.pin_type??(arr?arr.pinType:undefined));const pref=normPrefix(pType);
     if(pref&&pNum!==undefined)return`${pref}${pNum}`;if(w.dataStreamId!==undefined)return`V${w.dataStreamId}`;
     const maybe=(w.attachedPin||w.datastream||'').toString().toUpperCase();if(/^[VDA]\d+$/.test(maybe))return maybe;return'';}
-  function pinToHW(pin){const m=pin.match(/^([VDA])(\d+)$/i); if(!m)return null;const t=m[1].toUpperCase(),n=m; return {cmd:t==='V'?'vw':(t==='D'?'dw':'aw'),num:n};}
+  function pinToHW(pin){const m=pin.match(/^([VDA])(\d+)$/i); if(!m)return null;const t=m[1].toUpperCase(),n=m[2]; return {cmd:t==='V'?'vw':(t==='D'?'dw':'aw'),num:n};}
 
   async function resolveBaseAndFetchProjects(){
     const token=els.token.value.trim(); if(!token) throw new Error('Auth token required.');
     const eps=[(b)=>`${b}/${token}/projects`,(b)=>`${b}/${token}/project`,(b)=>`${b}/${token}/dashboard`];
-    for(const b of bases()){for(const mk of eps){try{setStatus(`Trying ${mk(b)} ...`);const data=await tryJSON(mk(b));const projs=normalizeProjects(data);if(projs.length){baseURL=b;setStatus(`Connected via ${baseURL}`);els.status.classList.add('connected');return projs;}}catch(e){}}}
+    for(const b of bases()){for(const mk of eps){try{setStatus(`Trying ${mk(b).replace(token, '***')} ...`, true);const data=await tryJSON(mk(b));const projs=normalizeProjects(data);if(projs.length){baseURL=b;setStatus(`Connected via ${baseURL}`);updateConnectionStatus(true);return projs;}}catch(e){}}}
     throw new Error(`Could not fetch projects.`);
   }
+  
   function normalizeProjects(raw){if(!raw)return[];if(Array.isArray(raw))return raw.map((p,i)=>({id:p.id??i,name:p.name||p.projectName||`Project ${i+1}`,widgets:widgetsOf(p)}));return[{id:raw.id??0,name:raw.name||raw.projectName||raw.title||'Project',widgets:widgetsOf(raw)}];}
   function widgetsOf(p){if(!p)return[];if(Array.isArray(p.widgets))return p.widgets;const all=[];if(Array.isArray(p.devices))for(const d of p.devices)if(Array.isArray(d.widgets))all.push(...d.widgets);if(Array.isArray(p.tabs))for(const t of p.tabs)if(Array.isArray(t.widgets))all.push(...t.widgets);return all;}
 
-  function renderProjects(projects){const wrap=els.projectsWrap;wrap.innerHTML='';projects.forEach((proj,pi)=>{const sec=document.createElement('section');sec.className='section';sec.innerHTML=`<div class="row"><div><h3 style="margin:0 0 2px 0">${escapeHTML(proj.name)}</h3><div class="kv">Widgets: ${proj.widgets.length}</div></div><span class="pill">Project ID: ${proj.id}</span></div><div class="grid" id="grid-${pi}"></div>`;wrap.appendChild(sec);const grid=sec.querySelector(`#grid-${pi}`);proj.widgets.forEach(w=>grid.appendChild(renderWidget(w)));});}
-  function renderWidget(w){const card=document.createElement('div');card.className='card';const label=escapeHTML(w.label||w.name||'Widget');const type=(w.type||w.widgetType||'').toUpperCase();const pin=extractPinString(w);card.dataset.pin=pin||'';card.innerHTML=`<div class="row"><h3>${label}</h3><span class="pill">${type||'UNKNOWN'}${pin?` • ${pin}`:''}</span></div><div class="content"></div>`;return card;}
+  function renderProjects(projects){
+    const wrap=els.projectsWrap;
+    wrap.innerHTML='';
+    
+    projects.forEach((proj,pi)=>{
+      const sec=document.createElement('section');
+      sec.className='section fade-in';
+      sec.style.animationDelay = `${pi * 0.1}s`;
+      
+      sec.innerHTML=`<div class="row"><div><h3><i data-lucide="folder"></i>${escapeHTML(proj.name)}</h3><div class="kv">Widgets: ${proj.widgets.length}</div></div><span class="pill"><i data-lucide="hash"></i>Project ID: ${proj.id}</span></div><div class="grid" id="grid-${pi}"></div>`;
+      
+      wrap.appendChild(sec);
+      const grid=sec.querySelector(`#grid-${pi}`);
+      
+      proj.widgets.forEach((w, wi) => {
+        const card = renderWidget(w);
+        card.style.animationDelay = `${(pi * 0.1) + (wi * 0.05)}s`;
+        card.classList.add('fade-in');
+        grid.appendChild(card);
+      });
+      
+      lucide.createIcons();
+    });
+  }
+  
+  function renderWidget(w){
+    const card=document.createElement('div');
+    card.className='card';
+    const label=escapeHTML(w.label||w.name||'Widget');
+    const type=(w.type||w.widgetType||'').toUpperCase();
+    const pin=extractPinString(w);
+    card.dataset.pin=pin||'';
+    const typeIcon = getWidgetIcon(type);
+    
+    card.innerHTML=`<div class="row"><h3><i data-lucide="${typeIcon}"></i>${label}</h3><span class="pill"><i data-lucide="cpu"></i>${type||'UNKNOWN'}${pin?` • ${pin}`:''}</span></div><div class="content"></div>`;
+    
+    return card;
+  }
+
+  function getWidgetIcon(type) {
+    const iconMap = {
+      'BUTTON': 'square',
+      'SLIDER': 'sliders-horizontal',
+      'GAUGE': 'gauge',
+      'LED': 'lightbulb',
+      'GRAPH': 'line-chart',
+      'LCD': 'monitor',
+      'TERMINAL': 'terminal',
+      'VIDEO': 'video',
+      'TABLE': 'table',
+      'SWITCH': 'toggle-left'
+    };
+    return iconMap[type] || 'box';
+  }
 
   async function connectAndLoad(){
-    saveCfg(); setStatus('Connecting...'); els.status.classList.remove('connected');
-    try{const projects=await resolveBaseAndFetchProjects();renderProjects(projects);setStatus(`Connected: ${baseURL}`);els.status.classList.add('connected');showModes();}
-    catch(e){console.error(e);setStatus(`Error: ${e.message}`);els.status.classList.remove('connected');alert(e.message);}
+    saveCfg(); 
+    setStatus('Connecting...', true); 
+    updateConnectionStatus(false);
+    els.connectBtn.querySelector('.btn-text').innerHTML = '<span class="loading"></span>Connecting...';
+    els.connectBtn.disabled = true;
+    
+    try{
+      const projects=await resolveBaseAndFetchProjects();
+      setStatus(`Connected: ${baseURL}`);
+      updateConnectionStatus(true);
+      showModes();
+      
+      // Show success animation and then render projects
+      showSuccessAnimation();
+      
+      // Render projects after a delay to sync with animation
+      setTimeout(() => {
+        renderProjects(projects);
+      }, 2000);
+    }
+    catch(e){
+      console.error(e);
+      setStatus(`Error: ${e.message}`);
+      updateConnectionStatus(false);
+      showNotification(e.message, 'error');
+    }
+    finally {
+      els.connectBtn.querySelector('.btn-text').textContent = 'Connect';
+      els.connectBtn.disabled = false;
+    }
   }
+
+  function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      color: white;
+      font-weight: 500;
+      z-index: 1000;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      max-width: 300px;
+      backdrop-filter: blur(10px);
+    `;
+    
+    if (type === 'error') {
+      notification.style.background = 'rgba(239, 68, 68, 0.9)';
+      notification.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+    } else {
+      notification.style.background = 'rgba(16, 249, 129, 0.9)';
+      notification.style.border = '1px solid rgba(16, 249, 129, 0.3)';
+    }
+    
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+    setTimeout(() => {
+      notification.style.transform = 'translateX(100%)';
+      setTimeout(() => document.body.removeChild(notification), 300);
+    }, 4000);
+  }
+  
   els.connectBtn.addEventListener('click',connectAndLoad);
   [els.server, els.token].forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter') connectAndLoad()}));
+
+  // Enhanced keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (UIState.isMinimized) {
+        expandHeader();
+      } else {
+        document.activeElement.blur();
+      }
+    }
+  });
+
+  // Click outside to minimize (when connected and expanded)
+  document.addEventListener('click', (e) => {
+    if (UIState.isConnected && !UIState.isMinimized && !els.headerForm.contains(e.target)) {
+      minimizeHeader();
+    }
+  });
+
+  // Initialize icons on load
+  document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+  });
   </script>
 </body>
 </html>
