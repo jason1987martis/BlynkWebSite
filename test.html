@@ -558,6 +558,7 @@
 
     /* Enhanced Range Input */
     input[type="range"] {
+      appearance: none;
       -webkit-appearance: none;
       width: 100%;
       height: 8px;
@@ -816,6 +817,7 @@
   let baseURL = "", pollTimer = null;
   const REFRESH_MS = 2000;
   let WRITE_MODE = null, READ_MODE = null;
+  let lastProjects = null;
 
   // Enhanced UI Functions
   function showSuccessAnimation() {
@@ -988,20 +990,44 @@
     updateConnectionStatus(false);
     els.connectBtn.querySelector('.btn-text').innerHTML = '<span class="loading"></span>Connecting...';
     els.connectBtn.disabled = true;
-    
+
+    // Stop any previous polling
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
     try{
       const projects=await resolveBaseAndFetchProjects();
       setStatus(`Connected: ${baseURL}`);
       updateConnectionStatus(true);
       showModes();
-      
+
       // Show success animation and then render projects
       showSuccessAnimation();
-      
+
       // Render projects after a delay to sync with animation
       setTimeout(() => {
         renderProjects(projects);
+        lastProjects = projects;
       }, 2000);
+
+      // Start polling for updates
+      pollTimer = setInterval(async () => {
+        try {
+          const newProjects = await resolveBaseAndFetchProjects();
+          // Only update if changed
+          if (JSON.stringify(newProjects) !== JSON.stringify(lastProjects)) {
+            renderProjects(newProjects);
+            lastProjects = newProjects;
+          }
+        } catch (err) {
+          // If polling fails, show error and stop polling
+          setStatus('Disconnected (polling error)', false);
+          updateConnectionStatus(false);
+          clearInterval(pollTimer);
+          pollTimer = null;
+        }
+      }, REFRESH_MS);
     }
     catch(e){
       console.error(e);
