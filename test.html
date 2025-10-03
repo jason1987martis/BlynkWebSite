@@ -969,20 +969,59 @@
   }
 
   function getWidgetIcon(type) {
-    const iconMap = {
-      'BUTTON': 'square',
-      'SLIDER': 'sliders-horizontal',
-      'GAUGE': 'gauge',
-      'LED': 'lightbulb',
-      'GRAPH': 'line-chart',
-      'LCD': 'monitor',
-      'TERMINAL': 'terminal',
-      'VIDEO': 'video',
-      'TABLE': 'table',
-      'SWITCH': 'toggle-left'
-    };
-    return iconMap[type] || 'box';
-  }
+  const iconMap = {
+    'BUTTON': 'square',
+    'STYLED_BUTTON': 'dot-circle',
+    'SLIDER': 'sliders-horizontal',
+    'VERTICAL_SLIDER': 'sliders-vertical',
+    'TIMER': 'clock',
+    'JOYSTICK': 'gamepad',
+    'RGB': 'palette',
+    'STEP_H': 'arrow-right',
+    'STEP_V': 'arrow-up',
+    'VALUE_DISPLAY': 'eye',
+    'LABELED_VALUE': 'tag',
+    'LED': 'lightbulb',
+    'GAUGE': 'gauge',
+    'LCD': 'monitor',
+    'SUPERCHART': 'chart-bar',
+    'TERMINAL': 'terminal',
+    'VIDEO_STREAMING': 'video',
+    'LEVEL_H': 'align-center',
+    'LEVEL_V': 'align-middle',
+    'IMAGE_GALLERY': 'images',
+    'TWITTER': 'twitter',
+    'NOTIFICATION': 'bell',
+    'EMAIL': 'envelope',
+    'DEVICE_SELECTOR': 'list-ul',
+    'DEVICE_TILES': 'th-large',
+    'BRIDGE': 'link',
+    'REAL_TIME_CLOCK': 'calendar-clock',
+    'BLE': 'bluetooth',
+    'EVENTOR': 'calendar-check',
+    'MUSIC_PLAYER': 'music',
+    'WEBHOOK': 'robot',
+    'REPORTS': 'file-chart',
+    'WEBPAGE_BUTTON': 'globe',
+    'TABS': 'layer-group',
+    'MENU': 'bars',
+    'TABLE': 'table',
+    'TIME_INPUT': 'clock-edit',
+    'MAP': 'map-marker',
+    'TEXT_INPUT': 'font',
+    'NUMERIC_INPUT': 'hashtag',
+    'SEGMENTED_SWITCH': 'toggle-off',
+    'GPS_STREAM': 'location-arrow',
+    'GPS_TRIGGER': 'location-crosshairs',
+    'ACCELEROMETER': 'mobile-alt',
+    'GRAVITY_SENSOR': 'magnet',
+    'LIGHT_SENSOR': 'sun',
+    'PROXIMITY_SENSOR': 'radar',
+    'BAROMETER_SENSOR': 'tachometer-alt'
+  };
+  return iconMap[type] || 'box';
+}
+
 
   async function connectAndLoad(){
     saveCfg(); 

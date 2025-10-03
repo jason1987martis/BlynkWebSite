@@ -1,0 +1,15 @@
+23:30:37.168 INFO - Using data dir '\home\jason1987martis\blynk'
+23:30:57.274 INFO - Region : local. Host : 192.168.57.44.
+23:30:57.739 INFO - Initializing gmail smtp mail transport. Username : iotnitte@gmail.com. SMTP host : in-v3.mailjet.com:587
+23:30:57.994 INFO - Reports : 0
+23:30:57.994 INFO - Didn't find custom user certificates.
+23:30:57.996 INFO - Didn't find Let's Encrypt certificates.
+23:30:57.996 WARN - You didn't specified 'server.host' or 'contact.email' properties in server.properties file. Automatic certificate generation is turned off. Please specify above properties for automatic certificates retrieval.
+23:30:57.996 WARN - ATTENTION. Server certificate paths (cert : 'D:\code_space\project blynk\BlynkWebSite', key : 'D:\code_space\project blynk\BlynkWebSite') not valid. Using embedded server certs and one way ssl. This is not secure. Please replace it with your own certs.
+23:30:58.601 INFO - HTTP API and WebSockets server listening at 8080 port.
+23:30:58.602 INFO - HTTPS API, WebSockets and Admin page server listening at 9443 port.
+23:30:58.603 INFO - Mqtt hardware server listening at 8440 port.
+23:32:16.565 WARN - User 'nnm24is050@nmamit.in' not registered. /192.168.57.44:53048
+23:32:18.605 WARN - User 'nnm24is050@nmamit.in' not registered. /192.168.57.44:53111
+23:32:22.427 WARN - User 'nnm24is050@nmamit.in' not registered. /192.168.57.44:53227
+23:32:23.721 WARN - User 'nnm24is050@nmamit.in' not registered. /192.168.57.44:53247
