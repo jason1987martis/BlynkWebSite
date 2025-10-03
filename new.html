@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Blynk Web Dashboard - Complete</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Google Fonts and Lucide Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<style>
+:root {
+  --emerald: #10f981;
+  --emerald-light: #34ffa1;
+  --seafoam: #6ee7b7;
+  --bg-color: #0a0f0e;
+  --card-bg: rgba(16, 249, 129, 0.05);
+  --border-color: rgba(16, 249, 129, 0.2);
+  --shadow: 0 8px 32px rgba(16, 249, 129, 0.15);
+  --hover-shadow: 0 12px 40px rgba(16, 249, 129, 0.25);
+  --text-primary: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --success: #10b981;
+  --glass-bg: rgba(16, 249, 129, 0.08);
+  --glass-border: rgba(16, 249, 129, 0.25);
+  --glass-hover: rgba(16, 249, 129, 0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--bg-color); color: var(--text-primary); line-height: 1.6; }
+
+body {
+  background-image: radial-gradient(circle at 20% 80%, rgba(16,249,129,0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(110,231,183,0.08) 0%, transparent 50%),
+                    radial-gradient(circle at 40% 40%, rgba(16,249,129,0.05) 0%, transparent 50%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
+}
+
+/* HEADER styles */
+header {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  margin: 2rem auto 1.5rem auto;
+  padding: 2rem 2.5rem;
+  max-width: 520px;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+header:hover { box-shadow: var(--hover-shadow); transform: translateY(-2px); }
+
+header.minimized {
+  position: fixed; top: 20px; right: 20px; width: 60px; height: 60px;
+  max-width: 60px; padding: 0; margin: 0; border-radius: 50%; cursor:pointer;
+  transform: scale(0.9); z-index: 1000;
+}
+header.minimized:hover { transform: scale(1); }
+
+.header-content { display: flex; flex-direction: column; gap: 1rem; }
+.header-title { font-size: 2.25rem; font-weight: 800; background: linear-gradient(135deg, var(--emerald), var(--seafoam));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap:0.5rem; }
+
+input { width: 100%; padding: 1rem 1.25rem; background: var(--glass-bg); border: 1.5px solid var(--glass-border);
+  border-radius: 16px; color: var(--emerald); font-family:inherit; font-size: 1rem; outline: none; transition: all 0.3s; }
+input:focus { border-color: var(--emerald); background: var(--glass-hover); box-shadow: 0 0 0 3px rgba(16,249,129,0.1); transform: scale(1.02); }
+input::placeholder { opacity: 0.7; color: var(--emerald-muted); }
+
+button { width: 100%; margin: 1.5rem 0 1rem 0; padding: 1rem 0; border: none; border-radius: 16px;
+  background: linear-gradient(135deg, var(--emerald), var(--emerald-light)); color:#0a0f0e; font-weight:700; font-size:1.1rem;
+  position: relative; cursor:pointer; box-shadow: 0 4px 20px rgba(16,249,129,0.3);
+  overflow: hidden; transition: all 0.3s; }
+button::before { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.6s; }
+button:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(16,249,129,0.4); }
+button:hover::before { left: 100%; }
+button:active { transform: translateY(0); }
+button:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.badge { font-size: 0.75rem; background: var(--glass-bg); padding: 0.5rem 1rem; border-radius: 20px; font-weight: 500;
+  border: 1px solid var(--glass-border); display: flex; align-items: center; gap:0.5rem; transition: all 0.3s; }
+.badge:hover { background: var(--glass-hover); transform: scale(1.05); }
+
+#status { font-size: 0.875rem; display:flex; align-items: center; gap:0.5rem; padding: 0.5rem 1rem; border-radius:20px;
+  border:1px solid var(--glass-border); background: var(--glass-bg); transition: all 0.3s; }
+#status::before { content:'●'; font-size:1rem; transition: all 0.3s; }
+#status.connected::before { color: var(--emerald); animation: pulse-green 2s infinite; }
+#status.disconnected::before { color: var(--danger); animation: pulse-red 2s infinite; }
+
+@keyframes pulse-red { 0%,100% {opacity: 1} 50% {opacity: 0.5} }
+@keyframes pulse-green { 0%,100% {opacity: 1} 50% {opacity: 0.7} }
+
+main { max-width:1200px; margin: 0 auto 3rem auto; padding: 0 1rem; }
+main.expanded { margin-top:2rem; }
+
+.project-container { margin-top:2rem; }
+.project { background: var(--card-bg); border:1px solid var(--border-color); border-radius:20px; padding:1rem; margin-bottom:1rem; }
+.project h3 { font-size:1.2rem; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+.widget-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-top:1rem; }
+.widget { background: #222; padding:1rem; border-radius:12px; color:#fff; display:flex; flex-direction:column; gap:0.5rem; }
+
+@media(max-width:768px){ body { font-size:13px; } }
+
+</style>
+</head>
+<body>
+
+<!-- CONNECTION OVERLAY -->
+<div id="connectSuccessOverlay" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(10,15,14,0.95); display:flex; align-items:center; justify-content:center; z-index:2000; opacity:0; pointer-events:none; transition:opacity 0.3s;">
+  <div style="text-align:center; transform:scale(0.5); transition:transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+    <div style="width:80px; height:80px; background:linear-gradient(135deg, var(--emerald), var(--emerald-light)); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:auto; box-shadow:0 0 40px rgba(16,249,129,0.5);">
+      <i data-lucide="check" style="color:#0a0f0e; font-size:2rem;"></i>
+    </div>
+    <div style="color:var(--emerald); font-size:1.5rem; font-weight:700; margin-top:1rem;">Connected!</div>
+    <div style="color:var(--emerald-text-secondary); font-size:1rem;">Loading your projects...</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="header-content">
+    <div class="header-title"><i data-lucide="zap"></i> Blynk Web Dashboard</div>
+    <div style="display:flex; gap:1rem; margin-top:1rem;">
+      <input id="server" placeholder="Server (e.g. 172.16.2.32)" />
+      <input id="token" placeholder="Auth Token" type="password" />
+    </div>
+    <button id="connectBtn"><span class="btn-text">Connect</span></button>
+    <div class="emerald-row" style="margin-top:1rem;">
+      <div id="apiMode" class="badge"><i data-lucide="activity"></i> write=?, read=?</div>
+      <div id="connectionStatus" class="badge" style="margin-left:auto"><span id="connIndicator" style="width:12px; height:12px; background:#f00; border-radius:50%; display:inline-block;"></span> idle</div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main id="main">
+  <div class="hint">
+    <i data-lucide="info"></i>
+    <div>It auto-loads project info. Use buttons & sliders below to control your hardware directly.</div>
+  </div>
+  <div id="projectsContainer"></div>
+</main>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script>
+// Initialize lucide icons
+lucide.createIcons();
+
+const els = {
+  server: document.getElementById('server'),
+  token: document.getElementById('token'),
+  connectBtn: document.getElementById('connectBtn'),
+  apiMode: document.getElementById('apiMode'),
+  statusDetails: document.getElementById('connectionStatus'),
+  connIndicator: document.getElementById('connIndicator'),
+  projectsContainer: document.getElementById('projectsContainer'),
+  overlay: document.getElementById('connectSuccessOverlay')
+};
+
+let baseApiUrl = '';
+let pollingInterval = null;
+let projects = [];
+let lastProjectsJson = '';
+let apiWriteMode='?', apiReadMode='?';
+
+// Utility
+function setStatus(text, connecting=false){ 
+  document.querySelector('#statusDetails span').textContent=text;
+  if(connecting){ 
+    document.querySelector('#statusDetails span').innerHTML = `<span class="loading"></span>${text}`;}
+}
+function updateConnectionIndicators(connected){
+  els.connIndicator.style.background=connected? '#0f0':'#f00';
+  els.statusDetails.className=connected?'connected':'disconnected';
+}
+
+// Load/Save config
+function saveConfig(){ localStorage.setItem('blynk_cfg',{server:els.server.value, token:els.token.value});}
+function loadConfig(){ 
+  const c=JSON.parse(localStorage.getItem('blynk_cfg')||'{}');
+  if(c.server){ els.server.value=c.server;}
+  if(c.token){ els.token.value=c.token;}
+}
+
+// Connect Button handler
+els.connectBtn.onclick=async ()=>{
+  saveConfig();
+  let server=els.server.value.trim(); if(!server){ alert('Enter server'); return; }
+  let token=els.token.value.trim(); if(!token){ alert('Enter token'); return; }
+  setStatus('Connecting...');
+  updateConnectionIndicators(false);
+  // Generate base URL options
+  const bases = [`http://${server}:8080`,`https://${server}:9443`,`http://${server}:9443`];
+  let success=false;
+  for(const base of bases){
+    try{
+      // Test fetch projects
+      const url=base+'/'+token+'/projects';
+      const res=await fetch(url); if(!res.ok) throw 'bad';
+      // fetch projects
+      const projs=await res.json();
+      // assign success
+      baseApiUrl=base; 
+      projects=projs; 
+      lastProjectsJson=JSON.stringify(projects);
+      success=true; break;
+    }catch(e){ continue; }
+  }
+  if(!success){ setStatus('Failed to connect'); return; }
+  setStatus('Connected to '+baseApiUrl);
+  updateConnectionIndicators(true);
+  showProjects();
+  startPolling();
+  showOverlay();
+};
+
+// Show overlay
+function showOverlay(){ 
+  els.overlay.style.opacity=1; els.overlay.style.pointerEvents='auto'; 
+  setTimeout(()=>{ els.overlay.style.opacity=0; els.overlay.style.pointerEvents='none'; }, 2500);
+}
+
+// Fetch projects
+async function fetchProjects(){
+  try{
+    const projRes=await fetch(`${baseApiUrl}/${els.token.value.trim()}/projects`);
+    if(!projRes.ok) throw 'Failed';
+    projects= await projRes.json();
+  }catch(e){ setStatus('Error fetching projects'); }
+}
+
+// Render projects
+function showProjects(){
+  els.projectsContainer.innerHTML='';
+  projects.forEach((proj,pi)=>{
+    let pdiv=document.createElement('div'); pdiv.className='project';
+    pdiv.innerHTML=`<h3><i data-lucide="folder"></i> ${escapeHTML(proj.name)}</h3><div class="widget-grid" id="proj-widgets-${pi}"></div>`;
+    els.projectsContainer.appendChild(pdiv);
+    // Render widgets
+    proj.widgets.forEach(w=>{
+      const widgetDiv=document.createElement('div'); widgetDiv.className='widget';
+      const label=escapeHTML(w.label||w.name||'Widget');
+      const type=(w.type||w.widgetType||'').toUpperCase();
+      const pin=extractPin(w);
+      widgetDiv.innerHTML=`
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div><i data-lucide="${getIconForType(type)}"></i> ${label}</div>
+          <button style="background:#222; border:none; padding:0.5em 1em; border-radius:8px; color:#0f0; cursor:pointer;" onclick="writePin('${pin}', 1)">ON</button>
+          <button style="background:#222; border:none; padding:0.5em 1em; border-radius:8px; color:#f00; cursor:pointer;" onclick="writePin('${pin}', 0)">OFF</button>
+        </div>`;
+      document.getElementById(`proj-widgets-${pi}`).appendChild(widgetDiv);
+    });
+  });
+  lucide.createIcons();
+}
+
+// Helper for icons
+function getIconForType(t){ 
+  const map={
+    'BUTTON':'square', 'SLIDER':'sliders-horizontal', 'RGB':'palette', 'LED':'lightbulb', 'GAUGE':'gauge', 'LCD':'monitor',
+    'TERMINAL':'terminal', 'VIDEO_STREAMING':'video', 'MAP':'map-pin', 'NOTIFICATION':'bell', 'WEBHOOK':'link'
+  };
+  return map[t]||'box'; 
+}
+
+// Extract Pin
+function extractPin(w){ 
+  if(w.pin) return w.pin.toString().toUpperCase();
+  if(w.pins && w.pins.length>0) return w.pins[0].pin.toString().toUpperCase();
+  return '';
+}
+
+// Write Pin API
+async function writePin(pin, value){
+  if(!baseApiUrl){ alert('Connect first'); return; }
+  try{
+    await fetch(`${baseApiUrl}/${els.token.value.trim()}/update/${pin}?value=${value}`,{method:'GET'});
+  }catch(e){ alert('Write failed'); }
+}
+
+// Polling
+async function startPolling(){
+  if(pollingInterval){ clearInterval(pollingInterval); }
+  pollingInterval=setInterval(async ()=>{
+    for(const proj of projects){
+      for(const w of proj.widgets){
+        const pin=extractPin(w);
+        // Read current value
+        try{
+          const res=await fetch(`${baseApiUrl}/${els.token.value.trim()}/get/${pin}`);
+          if(res.ok){
+            const val=await res.text();
+            // Update UI
+            // For simplicity, assume boolean widget
+            // You may add more specific handling
+            // For now, no actual displayed data
+          }
+        }catch(e){ /* ignore errors */ }
+      }
+    }
+  },2000);
+}
+
+// Initialize
+loadConfig();
+
+</script>
+</body>
+</html>

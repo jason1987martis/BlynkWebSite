@@ -1,16 +1,16 @@
-17:39:53.899 - DB url : jdbc:postgresql://172.16.2.32:5432/blynk?tcpKeepAlive=true&socketTimeout=150
-17:39:53.899 - DB user : test
-17:39:53.900 - Connecting to DB...
-17:40:03.965 - Not able connect to DB. Skipping. Reason : Failed to initialize pool: The connection attempt failed.
-17:40:03.966 - Reporting DB url : jdbc:postgresql://172.16.2.32:5432/blynk_reporting?tcpKeepAlive=true&socketTimeout=150
-17:40:03.966 - Reporting DB user : test
-17:40:03.966 - Connecting to reporting DB...
-17:40:13.967 - Not able connect to reporting DB. Skipping. Reason : Failed to initialize pool: The connection attempt failed.
-17:49:12.417 - DB url : jdbc:postgresql://172.16.2.32:5432/blynk?tcpKeepAlive=true&socketTimeout=150
-17:49:12.417 - DB user : test
-17:49:12.417 - Connecting to DB...
-17:49:22.486 - Not able connect to DB. Skipping. Reason : Failed to initialize pool: The connection attempt failed.
-17:49:22.489 - Reporting DB url : jdbc:postgresql://172.16.2.32:5432/blynk_reporting?tcpKeepAlive=true&socketTimeout=150
-17:49:22.489 - Reporting DB user : test
-17:49:22.489 - Connecting to reporting DB...
-17:49:32.496 - Not able connect to reporting DB. Skipping. Reason : Failed to initialize pool: The connection attempt failed.
+23:20:08.702 - DB url : jdbc:postgresql://172.16.2.32:5432/blynk?tcpKeepAlive=true&socketTimeout=150
+23:20:08.702 - DB user : test
+23:20:08.703 - Connecting to DB...
+23:20:18.791 - Not able connect to DB. Skipping. Reason : Failed to initialize pool: The connection attempt failed.
+23:20:18.792 - Reporting DB url : jdbc:postgresql://172.16.2.32:5432/blynk_reporting?tcpKeepAlive=true&socketTimeout=150
+23:20:18.792 - Reporting DB user : test
+23:20:18.792 - Connecting to reporting DB...
+23:20:28.794 - Not able connect to reporting DB. Skipping. Reason : Failed to initialize pool: The connection attempt failed.
+23:22:28.700 - DB url : jdbc:postgresql://172.16.2.32:5432/blynk?tcpKeepAlive=true&socketTimeout=150
+23:22:28.700 - DB user : test
+23:22:28.700 - Connecting to DB...
+23:22:38.759 - Not able connect to DB. Skipping. Reason : Failed to initialize pool: The connection attempt failed.
+23:22:38.761 - Reporting DB url : jdbc:postgresql://172.16.2.32:5432/blynk_reporting?tcpKeepAlive=true&socketTimeout=150
+23:22:38.761 - Reporting DB user : test
+23:22:38.761 - Connecting to reporting DB...
+23:22:48.763 - Not able connect to reporting DB. Skipping. Reason : Failed to initialize pool: The connection attempt failed.

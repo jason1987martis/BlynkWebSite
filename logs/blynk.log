@@ -1,25 +1,22 @@
-17:39:53.875 INFO - Using data dir '\home\jason1987martis\blynk'
-17:40:14.313 INFO - Region : local. Host : 192.168.57.44.
-17:40:14.865 INFO - Initializing gmail smtp mail transport. Username : iotnitte@gmail.com. SMTP host : in-v3.mailjet.com:587
-17:40:15.015 INFO - Reports : 0
-17:40:15.015 INFO - Didn't find custom user certificates.
-17:40:15.017 INFO - Didn't find Let's Encrypt certificates.
-17:40:15.017 WARN - You didn't specified 'server.host' or 'contact.email' properties in server.properties file. Automatic certificate generation is turned off. Please specify above properties for automatic certificates retrieval.
-17:40:15.017 WARN - ATTENTION. Server certificate paths (cert : 'D:\code_space\project blynk\BlynkWebSite', key : 'D:\code_space\project blynk\BlynkWebSite') not valid. Using embedded server certs and one way ssl. This is not secure. Please replace it with your own certs.
-17:40:15.723 INFO - HTTP API and WebSockets server listening at 8080 port.
-17:40:15.724 INFO - HTTPS API, WebSockets and Admin page server listening at 9443 port.
-17:40:15.725 INFO - Mqtt hardware server listening at 8440 port.
-17:40:20.165 WARN - User 'nnm24is050@nmamit.in' not registered. /192.168.57.44:51359
-17:40:34.938 WARN - User 'nnm24is050@nmamit.in' not registered. /192.168.57.44:51371
-17:40:36.991 WARN - User 'nnm24is050@nmamit.in' not registered. /192.168.57.44:51378
-17:49:12.395 INFO - Using data dir '\home\jason1987martis\blynk'
-17:49:32.787 INFO - Region : local. Host : 192.168.57.44.
-17:49:33.163 INFO - Initializing gmail smtp mail transport. Username : iotnitte@gmail.com. SMTP host : in-v3.mailjet.com:587
-17:49:33.254 INFO - Reports : 0
-17:49:33.254 INFO - Didn't find custom user certificates.
-17:49:33.255 INFO - Didn't find Let's Encrypt certificates.
-17:49:33.255 WARN - You didn't specified 'server.host' or 'contact.email' properties in server.properties file. Automatic certificate generation is turned off. Please specify above properties for automatic certificates retrieval.
-17:49:33.255 WARN - ATTENTION. Server certificate paths (cert : 'D:\code_space\project blynk\BlynkWebSite', key : 'D:\code_space\project blynk\BlynkWebSite') not valid. Using embedded server certs and one way ssl. This is not secure. Please replace it with your own certs.
-17:49:33.836 INFO - HTTP API and WebSockets server listening at 8080 port.
-17:49:33.837 INFO - HTTPS API, WebSockets and Admin page server listening at 9443 port.
-17:49:33.838 INFO - Mqtt hardware server listening at 8440 port.
+23:20:08.674 INFO - Using data dir 'D:\code_space\project blynk\BlynkWebSite\data'
+23:20:29.161 INFO - Region : local. Host : 192.168.1.50.
+23:20:29.667 INFO - Initializing gmail smtp mail transport. Username : iotnitte@gmail.com. SMTP host : in-v3.mailjet.com:587
+23:20:29.761 INFO - Reports : 0
+23:20:29.761 INFO - Didn't find custom user certificates.
+23:20:29.763 INFO - Didn't find Let's Encrypt certificates.
+23:20:29.763 WARN - You didn't specified 'server.host' or 'contact.email' properties in server.properties file. Automatic certificate generation is turned off. Please specify above properties for automatic certificates retrieval.
+23:20:29.763 WARN - ATTENTION. Server certificate paths (cert : 'D:\code_space\project blynk\BlynkWebSite', key : 'D:\code_space\project blynk\BlynkWebSite') not valid. Using embedded server certs and one way ssl. This is not secure. Please replace it with your own certs.
+23:20:30.429 INFO - HTTP API and WebSockets server listening at 8080 port.
+23:20:30.430 INFO - HTTPS API, WebSockets and Admin page server listening at 9443 port.
+23:20:30.431 INFO - Mqtt hardware server listening at 8440 port.
+23:22:28.674 INFO - Using data dir 'D:\code_space\project blynk\BlynkWebSite\data'
+23:22:49.115 INFO - Region : local. Host : 192.168.70.44.
+23:22:49.525 INFO - Initializing gmail smtp mail transport. Username : iotnitte@gmail.com. SMTP host : in-v3.mailjet.com:587
+23:22:49.616 INFO - Reports : 0
+23:22:49.616 INFO - Didn't find custom user certificates.
+23:22:49.617 INFO - Didn't find Let's Encrypt certificates.
+23:22:49.617 WARN - You didn't specified 'server.host' or 'contact.email' properties in server.properties file. Automatic certificate generation is turned off. Please specify above properties for automatic certificates retrieval.
+23:22:49.618 WARN - ATTENTION. Server certificate paths (cert : 'D:\code_space\project blynk\BlynkWebSite', key : 'D:\code_space\project blynk\BlynkWebSite') not valid. Using embedded server certs and one way ssl. This is not secure. Please replace it with your own certs.
+23:22:50.140 INFO - HTTP API and WebSockets server listening at 8080 port.
+23:22:50.141 INFO - HTTPS API, WebSockets and Admin page server listening at 9443 port.
+23:22:50.141 INFO - Mqtt hardware server listening at 8440 port.
